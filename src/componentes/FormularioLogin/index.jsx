@@ -7,10 +7,10 @@ const FormularioLogin = () => {
 
     const [erros, setErros] = useState({email:{valido:true,texto:""}});
     
-    //tratando o erro do email
+    //tratando o erro
     function erroEmail(){
         if(email.length < 3 ){
-            setErros({email:{valido:false, texto: "O email dever ter mais de 3 caracteres"}});
+            setErros({email:{valido:false, texto: "O email deve ter mais de 3 caracteres"}});
         }else{
             setErros({email:{valido:true, texto: ""}});
         }
@@ -19,8 +19,6 @@ const FormularioLogin = () => {
     return(
         <form onSubmit={event => {
             event.preventDefault();
-            console.log(email);
-            console.log(senha);
         }}
         >
             <TextField 
