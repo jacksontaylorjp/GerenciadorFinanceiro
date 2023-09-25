@@ -51,9 +51,29 @@ async function insertUser (user){
     //comando para o banco, foi passado de forma diferente para evitar ataques.
     return await client.query(sql, values);
 }
+//atualizando usuário
+async function updateUser (id, user){
+    //connectando ao banco
+    const client = await connect();
+    const sql = "UPDATE usuarios SET nome=$1, senha=$2 WHERE id=$3";
+    const values = [user.nome, user.senha, id];
+    //comando para o banco, foi passado de forma diferente para evitar ataques.
+    return await client.query(sql, values);
+}
+//atualizando usuário
+async function deleteUser (id){
+    //connectando ao banco
+    const client = await connect();
+    const sql = "DELETE FROM usuarios WHERE id=$1";
+    const values = [id];
+    //comando para o banco, foi passado de forma diferente para evitar ataques.
+    return await client.query(sql, values);
+}
 
 module.exports = {
     selectUsers,
     selectUser,
-    insertUser
+    insertUser,
+    updateUser,
+    deleteUser
 }

@@ -41,6 +41,22 @@ app.post("/users", async (req, res) => {
     res.sendStatus(201);
 })
 
+//rota para atualização
+app.patch("/users/:id", async (req, res) => {
+    //pegando o id com o params e os dados do cliente no body
+    await db.updateUser(req.params.id, req.body);
+    //para demostrar que os dados foi atualizado 200
+    res.sendStatus(200);
+})
+
+//rota para excluir
+app.delete("/users/:id", async (req, res) => {
+    //pegando o id com o params e os dados do cliente no body
+    await db.deleteUser(req.params.id);
+    //para demostrar que os dados foi 204
+    res.sendStatus(204);
+})
+
 app.listen(port);
 
 console.log("back rodando")
