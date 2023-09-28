@@ -1,6 +1,6 @@
 import {Container, Grid, Typography, Link } from "@mui/material";
 import '@fontsource/roboto/400.css';
-import FormularioLogin from "../FormularioLogin";
+import FormularioLogin from "componentes/FormularioLogin";
 const PagLogin = () => {
     return(
         <Container 
