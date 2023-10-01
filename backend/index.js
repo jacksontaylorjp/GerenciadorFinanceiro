@@ -7,7 +7,14 @@ const port = process.env.PORT;
 
 const express = require('express');
 
+//para resolver o problema na comunicação backend com o front
+const cors = require('cors');
+
 const app = express();
+
+//permite solicitações de todas as origem
+//importante colocar restrições quando na produção.
+app.use(cors());
 
 //configurando beck para receber json
 app.use(express.json());
@@ -57,6 +64,7 @@ app.delete("/users/:id", async (req, res) => {
     res.sendStatus(204);
 })
 
+//o server esta escutando na porta informada no .env
 app.listen(port);
 
 console.log("back rodando")

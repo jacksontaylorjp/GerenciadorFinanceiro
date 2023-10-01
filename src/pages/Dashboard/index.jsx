@@ -12,15 +12,18 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
-import MoneyOffIcon from '@mui/icons-material/MoneyOff';
+import ReceitaIcon from '@mui/icons-material/CurrencyExchangeOutlined';
+import DespesasIcon from '@mui/icons-material/MoneyOff';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import { Badge } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Badge, MenuItem } from '@mui/material';
 import BodyDashboard from 'componentes/BodyDashboard';
+import { AccountCircle } from '@mui/icons-material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AddIcon from '@mui/icons-material/Add';
+import ArrowDoubleRight from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 //INÍCIO DA CUSTOMIZAÇÃO GRÁFICA
 const drawerWidth = 240;
@@ -95,13 +98,28 @@ const Dashboard = () => {
   const theme = useTheme();
   //
   const [open, setOpen] = React.useState(false);
+  const [expandedAccordionReceitas, setExpandedAccordionReceitas] = React.useState(false);
+  const [expandedAccordionDespesas, setExpandedAccordionDespesas] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
-
   const handleDrawerClose = () => {
     setOpen(false);
+    //fechando o accordion ao fechar o menu
+    setExpandedAccordionReceitas(false);
+    setExpandedAccordionDespesas(false);
+  };
+
+  const handleAccordionOpenCloseReceitas = () => {
+    setOpen(true);
+    setExpandedAccordionReceitas(!expandedAccordionReceitas);
+
+  };
+  const handleAccordionOpenCloseDespesas = () => {
+    setOpen(true);
+    setExpandedAccordionDespesas(!expandedAccordionDespesas);
+
   };
 
   return (
@@ -110,10 +128,10 @@ const Dashboard = () => {
 
       <AppBar position="fixed" open={open}>
         <Toolbar
-        sx={{
+          sx={{
             display: 'flex',
             justifyContent: 'space-between',
-        }}
+          }}
         >
           <IconButton
             color="inherit"
@@ -125,20 +143,41 @@ const Dashboard = () => {
               ...(open && { display: 'none' }),
             }}
           >
-        {/* icone /// para abrir o menu */} 
+            {/* icone /// para abrir o menu */}
             <MenuIcon />
           </IconButton>
-        {/* titulo do nav */}
+          {/* titulo do nav */}
           <Typography variant="h6" noWrap component="div">
             Dashboard
           </Typography>
 
-        
+
 
           {/* icone notificação */}
-        <Badge color="secondary" overlap="circular" badgeContent=" ">
-            <NotificationsNoneOutlinedIcon />
-        </Badge>
+          <MenuItem>
+
+            <IconButton
+              size="large"
+              aria-label="show 2 new notifications"
+              color="inherit"
+            >
+              <Badge badgeContent={2} color="error">
+                <NotificationsNoneOutlinedIcon />
+              </Badge>
+            </IconButton>
+
+            {/* icone conta */}
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+
+          </MenuItem>
         </Toolbar>
       </AppBar>
 
@@ -151,66 +190,134 @@ const Dashboard = () => {
 
         {/* barra horizontal divisora */}
         <Divider />
+        {/* INICIO DE RECEITAS */}
+        <Accordion
+          expanded={expandedAccordionReceitas}
+          onClick={handleAccordionOpenCloseReceitas}
+        >
+          <AccordionSummary
+            expandIcon={open ? <ExpandMoreIcon /> : ''}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
 
-        <List>
-            {/* array com os nomes do menu */}
-          {['Receitas'].map((text) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
+          >
+            {/* lista dos icones */}
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : 'auto',
+                ml: open ? 0 : 7.5,
+                justifyContent: 'center',
+              }}
+            >
+              {/* icone */}
+              <ReceitaIcon />
+            </ListItemIcon>
+
+            <ListItemText primary="Receitas"
+              sx={{
+                opacity: open ? 1 : 0,
+              }}
+            />
+          </AccordionSummary>
+          <AccordionDetails>
+            <Divider />
+            <ListItemButton
+              sx={{
+                ml: open ? 3 : 0,
+              }}
+            >
+              {/* icone */}
+              <ArrowDoubleRight />
+              <ListItemText primary={"Adicionar"}
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
+                  opacity: open ? 1 : 1,
                 }}
-              >
-                {/* lista dos icones */}
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                    <CurrencyExchangeOutlinedIcon />
-
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-
-        <List>
-            {/* array com os nomes do menu */}
-          {['Despesas'].map((text) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
+              />
+            </ListItemButton>
+            <ListItemButton
+              sx={{
+                ml: open ? 3 : 0,
+              }}
+            >
+              {/* icone */}
+              <ArrowDoubleRight />
+              <ListItemText primary={"Outros"}
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
+                  opacity: open ? 1 : 1,
                 }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                    <MoneyOffIcon />
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+              />
+            </ListItemButton>
+          </AccordionDetails>
+        </Accordion>
+
+        {/* FIM DE RECEITAS */}
+
+        {/* INICIO DE DESPESAS */}
+        <Accordion
+          expanded={expandedAccordionDespesas}
+          onClick={handleAccordionOpenCloseDespesas}
+        >
+          <AccordionSummary
+            expandIcon={open ? <ExpandMoreIcon /> : ''}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : 'auto',
+                ml: open ? 0 : 8,
+                justifyContent: 'center',
+              }}
+            >
+              {/* icone */}
+              <DespesasIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Despesas"}
+              sx={{
+                opacity: open ? 1 : 0,
+              }}
+            />
+          </AccordionSummary>
+          <AccordionDetails>
+            <Divider />
+            <ListItemButton
+              sx={{
+                ml: open ? 3 : 0,
+              }}
+            >
+              {/* icone */}
+              <ArrowDoubleRight />
+              <ListItemText primary={"Adicionar"}
+                sx={{
+                  opacity: open ? 1 : 1,
+                }}
+              />
+            </ListItemButton>
+            <ListItemButton
+              sx={{
+                ml: open ? 3 : 0,
+              }}
+            >
+              {/* icone */}
+              <ArrowDoubleRight />
+              <ListItemText primary={"Outros"}
+                sx={{
+                  opacity: open ? 1 : 1,
+                }}
+              />
+            </ListItemButton>
+          </AccordionDetails>
+        </Accordion>
+
+        {/* FIM DE DESPESAS */}
+
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        
         {/* corpo do dashboard */}
-        <BodyDashboard/>
+        <BodyDashboard />
 
       </Box>
     </Box>

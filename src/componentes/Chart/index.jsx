@@ -8,7 +8,7 @@ const chartSetting = {
       label: 'R$',
     },
   ],
-  width: 1024,
+//   width: 1024,
   height: 300,
   sx: {
     [`.${axisClasses.left} .${axisClasses.label}`]: {
@@ -19,17 +19,17 @@ const chartSetting = {
 const dataset = [
   {
     receitas: 59.00,
-    despesas: 57.00,
+    despesas: 12.00,
     month: 'Jan',
   },
   {
     receitas: 59.00,
-    despesas: 57.00,
+    despesas: 40.00,
     month: 'Fev',
   },
   {
     receitas: 59.00,
-    despesas: 57.00,
+    despesas: 5.00,
     month: 'Mar',
   },
   {
@@ -80,7 +80,7 @@ const dataset = [
   
 ];
 
-const valueFormatter = (value) => `R$${value}`;
+const valueFormatter = (value) => `R$${value}.00`;
 
 const Chart = () => {
   return (

@@ -26,11 +26,20 @@ const FormularioLogin = () => {
         },
     });
 
+    // async function validaUsuario(id){
+    //     const response = await fetch(`http://localhost:4000/users/${id}`,{
+    //         method: 'GET',
+    //     })
+    //     const data = await response.json();
+    //     console.log(data);
+    // }
 
     return (
         <form onSubmit={event => {
             event.preventDefault();
-            formik.handleSubmit()
+            formik.handleSubmit();
+
+            // validaUsuario(1);
         }}
         >
             <TextField

@@ -8,8 +8,7 @@ function App() {
     <BrowserRouter>
       <Routes>
           <Route path="/login" element={<PagLogin/>}/>
-          <Route path="/" element={<h1>Página Inicial</h1>}/>
-          <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/" element={<Dashboard/>}/>
           <Route path="*" element={<h1>Página não encontrada</h1>}/>
       </Routes>
     </BrowserRouter>
