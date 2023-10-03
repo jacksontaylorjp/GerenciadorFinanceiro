@@ -193,9 +193,9 @@ const Dashboard = () => {
         {/* INICIO DE RECEITAS */}
         <Accordion
           expanded={expandedAccordionReceitas}
-          onClick={handleAccordionOpenCloseReceitas}
         >
           <AccordionSummary
+            onClick={handleAccordionOpenCloseReceitas}
             expandIcon={open ? <ExpandMoreIcon /> : ''}
             aria-controls="panel1a-content"
             id="panel1a-header"
@@ -256,9 +256,9 @@ const Dashboard = () => {
         {/* INICIO DE DESPESAS */}
         <Accordion
           expanded={expandedAccordionDespesas}
-          onClick={handleAccordionOpenCloseDespesas}
-        >
+          >
           <AccordionSummary
+          onClick={handleAccordionOpenCloseDespesas}
             expandIcon={open ? <ExpandMoreIcon /> : ''}
             aria-controls="panel1a-content"
             id="panel1a-header"

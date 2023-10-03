@@ -1,99 +1,67 @@
 import * as React from 'react';
-import { BarChart } from '@mui/x-charts/BarChart';
-import { axisClasses } from '@mui/x-charts';
+import ReactApexChart from 'react-apexcharts';
 
-const chartSetting = {
-  yAxis: [
-    {
-      label: 'R$',
+
+
+var state = {
+
+  series: [{
+    name: 'Receitas',
+    data: [44, 55, 57, 56, 61, 58, 63, 60, 66, 22, 54, 88]
+  }, {
+    name: 'Despesas',
+    data: [76, 85, 101, 98, 87, 105, 91, 114, 94, 66, 11, 100]
+  }],
+  options: {
+    chart: {
+      type: 'bar',
+      height: 350
     },
-  ],
-//   width: 1024,
-  height: 300,
-  sx: {
-    [`.${axisClasses.left} .${axisClasses.label}`]: {
-      transform: 'rotate(-90deg) translate(0px, -20px)',
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '55%',
+        endingShape: 'rounded'
+      },
     },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ['transparent']
+    },
+    xaxis: {
+      categories: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    },
+    yaxis: {
+      title: {
+        text: 'R$'
+      }
+    },
+    fill: {
+      opacity: 1
+    },
+    tooltip: {
+      y: {
+        formatter: function (val) {
+          return "R$ " + val
+        }
+      }
+    }
   },
+
+
 };
-const dataset = [
-  {
-    receitas: 59.00,
-    despesas: 12.00,
-    month: 'Jan',
-  },
-  {
-    receitas: 59.00,
-    despesas: 40.00,
-    month: 'Fev',
-  },
-  {
-    receitas: 59.00,
-    despesas: 5.00,
-    month: 'Mar',
-  },
-  {
-    receitas: 59.00,
-    despesas: 57.00,
-    month: 'Abr',
-  },
-  {
-    receitas: 59.00,
-    despesas: 57.00,
-    month: 'Mai',
-  },
-  {
-    receitas: 59.00,
-    despesas: 57.00,
-    month: 'Jun',
-  },
-  {
-    receitas: 59.00,
-    despesas: 57.00,
-    month: 'Jul',
-  },
-  {
-    receitas: 59.00,
-    despesas: 57.00,
-    month: 'Ago',
-  },
-  {
-    receitas: 59.00,
-    despesas: 57.00,
-    month: 'Set',
-  },
-  {
-    receitas: 59.00,
-    despesas: 57.00,
-    month: 'Out',
-  },
-  {
-    receitas: 59.00,
-    despesas: 57.00,
-    month: 'Nov',
-  },
-  {
-    receitas: 59.00,
-    despesas: 57.00,
-    month: 'Dez',
-  },
-  
-];
 
-const valueFormatter = (value) => `R$${value}.00`;
+
 
 const Chart = () => {
   return (
-    <BarChart
-      dataset={dataset}
-      xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
-      series={[
-        { dataKey: 'receitas', label: 'Receitas', valueFormatter },
-        { dataKey: 'despesas', label: 'Despesas', valueFormatter },
-      ]}
-      {...chartSetting}
-    />
+      <ReactApexChart options={state.options} series={state.series} type="bar" height={280} />
   );
 }
+
 
 export default Chart;
