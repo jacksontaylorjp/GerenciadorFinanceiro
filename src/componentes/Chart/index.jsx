@@ -7,10 +7,12 @@ var state = {
 
   series: [{
     name: 'Receitas',
-    data: [44, 55, 57, 56, 61, 58, 63, 60, 66, 22, 54, 88]
+    data: [44, 55, 57, 56, 61, 58, 63, 60, 66, 22, 54, 88],
+    // color: "#228B22"
   }, {
     name: 'Despesas',
-    data: [76, 85, 101, 98, 87, 105, 91, 114, 94, 66, 11, 100]
+    data: [76, 85, 101, 98, 87, 105, 91, 114, 94, 66, 11, 100],
+    // color: "#FF0000"
   }],
   options: {
     chart: {
@@ -20,12 +22,12 @@ var state = {
     plotOptions: {
       bar: {
         horizontal: false,
-        columnWidth: '55%',
+        columnWidth: '80%',
         endingShape: 'rounded'
       },
     },
     dataLabels: {
-      enabled: false
+      enabled: true
     },
     stroke: {
       show: true,

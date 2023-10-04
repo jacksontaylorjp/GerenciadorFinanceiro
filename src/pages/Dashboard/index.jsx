@@ -222,6 +222,7 @@ const Dashboard = () => {
           </AccordionSummary>
           <AccordionDetails>
             <Divider />
+            
             <ListItemButton
               sx={{
                 ml: open ? 3 : 0,
@@ -235,6 +236,7 @@ const Dashboard = () => {
                 }}
               />
             </ListItemButton>
+            
             <ListItemButton
               sx={{
                 ml: open ? 3 : 0,
