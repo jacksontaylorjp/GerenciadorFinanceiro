@@ -14,7 +14,9 @@ const app = express();
 
 //permite solicitações de todas as origem
 //importante colocar restrições quando na produção.
-app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
 
 //configurando beck para receber json
 app.use(express.json());

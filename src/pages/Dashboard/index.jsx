@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -18,12 +17,12 @@ import ListItemText from '@mui/material/ListItemText';
 import ReceitaIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import DespesasIcon from '@mui/icons-material/MoneyOff';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import { Accordion, AccordionDetails, AccordionSummary, Badge, MenuItem } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Badge, MenuItem} from '@mui/material';
 import BodyDashboard from 'componentes/BodyDashboard';
 import { AccountCircle } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import AddIcon from '@mui/icons-material/Add';
 import ArrowDoubleRight from '@mui/icons-material/KeyboardDoubleArrowRight';
+import ModalAdd from 'componentes/ModalAdd';
 
 //INÍCIO DA CUSTOMIZAÇÃO GRÁFICA
 const drawerWidth = 240;
@@ -96,7 +95,21 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const Dashboard = () => {
   const theme = useTheme();
-  //
+
+  //ModalAdd
+  const [isModalOpenModalAdd, setIsModalOpenModalAdd] = React.useState(false);
+  const showModalAdd = () => {
+    setIsModalOpenModalAdd(true);
+  };
+
+  const handleOkModalAdd = () => {
+    setIsModalOpenModalAdd(false);
+  };
+  const handleCancelModalAdd = () => {
+    setIsModalOpenModalAdd(false);
+  };
+  //FIM ModalAdd
+
   const [open, setOpen] = React.useState(false);
   const [expandedAccordionReceitas, setExpandedAccordionReceitas] = React.useState(false);
   const [expandedAccordionDespesas, setExpandedAccordionDespesas] = React.useState(false);
@@ -123,6 +136,13 @@ const Dashboard = () => {
   };
 
   return (
+    <>
+    <ModalAdd 
+                open={isModalOpenModalAdd} 
+                onOk={handleOkModalAdd} 
+                onCancel={handleCancelModalAdd}
+              />
+
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
 
@@ -222,12 +242,13 @@ const Dashboard = () => {
           </AccordionSummary>
           <AccordionDetails>
             <Divider />
-            
+
             <ListItemButton
               sx={{
                 ml: open ? 3 : 0,
               }}
-            >
+              onClick={showModalAdd}
+              >
               {/* icone */}
               <ArrowDoubleRight />
               <ListItemText primary={"Adicionar"}
@@ -235,8 +256,9 @@ const Dashboard = () => {
                   opacity: open ? 1 : 1,
                 }}
               />
+              
             </ListItemButton>
-            
+
             <ListItemButton
               sx={{
                 ml: open ? 3 : 0,
@@ -258,9 +280,9 @@ const Dashboard = () => {
         {/* INICIO DE DESPESAS */}
         <Accordion
           expanded={expandedAccordionDespesas}
-          >
+        >
           <AccordionSummary
-          onClick={handleAccordionOpenCloseDespesas}
+            onClick={handleAccordionOpenCloseDespesas}
             expandIcon={open ? <ExpandMoreIcon /> : ''}
             aria-controls="panel1a-content"
             id="panel1a-header"
@@ -323,6 +345,7 @@ const Dashboard = () => {
 
       </Box>
     </Box>
+    </>
   );
 }
 
