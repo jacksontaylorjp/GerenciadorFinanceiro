@@ -22,7 +22,7 @@ import BodyDashboard from 'componentes/BodyDashboard';
 import { AccountCircle } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowDoubleRight from '@mui/icons-material/KeyboardDoubleArrowRight';
-import ModalAdd from 'componentes/ModalAdd';
+import ModalAddReceita from 'componentes/ModalAddReceita';
 
 //INÍCIO DA CUSTOMIZAÇÃO GRÁFICA
 const drawerWidth = 240;
@@ -97,16 +97,16 @@ const Dashboard = () => {
   const theme = useTheme();
 
   //ModalAdd
-  const [isModalOpenModalAdd, setIsModalOpenModalAdd] = React.useState(false);
-  const showModalAdd = () => {
-    setIsModalOpenModalAdd(true);
+  const [isModalOpenModalAddReceita, setIsModalOpenModalAddReceita] = React.useState(false);
+  const showModalAddReceita = () => {
+    setIsModalOpenModalAddReceita(true);
   };
 
-  const handleOkModalAdd = () => {
-    setIsModalOpenModalAdd(false);
+  const handleOkModalAddReceita = () => {
+    setIsModalOpenModalAddReceita(false);
   };
-  const handleCancelModalAdd = () => {
-    setIsModalOpenModalAdd(false);
+  const handleCancelModalAddReceita = () => {
+    setIsModalOpenModalAddReceita(false);
   };
   //FIM ModalAdd
 
@@ -137,10 +137,11 @@ const Dashboard = () => {
 
   return (
     <>
-    <ModalAdd 
-                open={isModalOpenModalAdd} 
-                onOk={handleOkModalAdd} 
-                onCancel={handleCancelModalAdd}
+    <ModalAddReceita 
+                open={isModalOpenModalAddReceita} 
+                onOk={handleOkModalAddReceita} 
+                onCancel={handleCancelModalAddReceita}
+                titulo="Receita"
               />
 
     <Box sx={{ display: 'flex' }}>
@@ -247,7 +248,7 @@ const Dashboard = () => {
               sx={{
                 ml: open ? 3 : 0,
               }}
-              onClick={showModalAdd}
+              onClick={showModalAddReceita}
               >
               {/* icone */}
               <ArrowDoubleRight />
