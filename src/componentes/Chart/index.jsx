@@ -1,6 +1,7 @@
 import * as React from 'react';
 import ReactApexChart from 'react-apexcharts';
-
+import { Typography } from "antd";
+import { Grid, Paper } from "@mui/material";
 
 
 var state = {
@@ -60,8 +61,22 @@ var state = {
 
 
 const Chart = () => {
+  const { Title } = Typography;
   return (
-      <ReactApexChart options={state.options} series={state.series} type="bar" height={280} />
+    <Grid item xs={12} md={0} lg={12}>
+      <Title level={3}>Receitas X Despesas</Title>
+      <Paper
+        sx={{
+          p: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          // height: 300,
+        }}
+        elevation={2}
+      >
+        <ReactApexChart options={state.options} series={state.series} type="bar" height={280} />
+      </Paper>
+    </Grid>
   );
 }
 

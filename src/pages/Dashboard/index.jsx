@@ -22,7 +22,8 @@ import BodyDashboard from 'componentes/BodyDashboard';
 import { AccountCircle } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowDoubleRight from '@mui/icons-material/KeyboardDoubleArrowRight';
-import ModalAddReceita from 'componentes/ModalAddReceita';
+import ModalAddReceita from 'componentes/ModalAddReceitas';
+import ModalAddDespesas from 'componentes/ModalAddDespesas';
 
 //INÍCIO DA CUSTOMIZAÇÃO GRÁFICA
 const drawerWidth = 240;
@@ -96,7 +97,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const Dashboard = () => {
   const theme = useTheme();
 
-  //ModalAdd
+  //ModalAddReceita
   const [isModalOpenModalAddReceita, setIsModalOpenModalAddReceita] = React.useState(false);
   const showModalAddReceita = () => {
     setIsModalOpenModalAddReceita(true);
@@ -108,7 +109,19 @@ const Dashboard = () => {
   const handleCancelModalAddReceita = () => {
     setIsModalOpenModalAddReceita(false);
   };
-  //FIM ModalAdd
+  //FIM ModalAddReceita
+  const [isModalOpenModalAddDespesa, setIsModalOpenModalAddDespesa] = React.useState(false);
+  const showModalAddDespesa = () => {
+    setIsModalOpenModalAddDespesa(true);
+  };
+
+  const handleOkModalAddDespesa = () => {
+    setIsModalOpenModalAddDespesa(false);
+  };
+  const handleCancelModalAddDespesa = () => {
+    setIsModalOpenModalAddDespesa(false);
+  };
+  //FIM ModalAddDespesa
 
   const [open, setOpen] = React.useState(false);
   const [expandedAccordionReceitas, setExpandedAccordionReceitas] = React.useState(false);
@@ -141,7 +154,13 @@ const Dashboard = () => {
                 open={isModalOpenModalAddReceita} 
                 onOk={handleOkModalAddReceita} 
                 onCancel={handleCancelModalAddReceita}
-                titulo="Receita"
+                titulo="Receitas"
+              />
+    <ModalAddDespesas 
+                open={isModalOpenModalAddDespesa} 
+                onOk={handleOkModalAddDespesa} 
+                onCancel={handleCancelModalAddDespesa}
+                titulo="Despesas"
               />
 
     <Box sx={{ display: 'flex' }}>
@@ -259,20 +278,6 @@ const Dashboard = () => {
               />
               
             </ListItemButton>
-
-            <ListItemButton
-              sx={{
-                ml: open ? 3 : 0,
-              }}
-            >
-              {/* icone */}
-              <ArrowDoubleRight />
-              <ListItemText primary={"Outros"}
-                sx={{
-                  opacity: open ? 1 : 1,
-                }}
-              />
-            </ListItemButton>
           </AccordionDetails>
         </Accordion>
 
@@ -311,23 +316,11 @@ const Dashboard = () => {
               sx={{
                 ml: open ? 3 : 0,
               }}
+              onClick={showModalAddDespesa}
             >
               {/* icone */}
               <ArrowDoubleRight />
               <ListItemText primary={"Adicionar"}
-                sx={{
-                  opacity: open ? 1 : 1,
-                }}
-              />
-            </ListItemButton>
-            <ListItemButton
-              sx={{
-                ml: open ? 3 : 0,
-              }}
-            >
-              {/* icone */}
-              <ArrowDoubleRight />
-              <ListItemText primary={"Outros"}
                 sx={{
                   opacity: open ? 1 : 1,
                 }}
