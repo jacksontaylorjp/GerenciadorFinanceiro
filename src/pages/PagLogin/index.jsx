@@ -18,7 +18,7 @@ const PagLogin = () => {
                 justifyContent="space-around"
                 alignItems="center"
             >
-                <img src="https://cdn-icons-png.flaticon.com/128/871/871589.png"></img>
+                <img src="https://cdn-icons-png.flaticon.com/128/871/871589.png" alt="logo"></img>
                 <Typography 
                     variant="h4"
                     component="h1"

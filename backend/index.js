@@ -7,6 +7,10 @@ const port = process.env.PORT;
 
 const express = require('express');
 
+//token jwt, é necessário o npm i jsonwebtoken
+const jwt = require('jsonwebtoken');
+const SECRET = 'admin';
+
 //para resolver o problema na comunicação backend com o front
 const cors = require('cors');
 
@@ -30,6 +34,57 @@ app.get("/", (req, res) => {
     )
 })
 
+//função para utilizar nas rotas seguras
+function verifyJWT(req, res, next) {
+    const token = req.headers['x-access-token'];
+    
+    const index = backlist.findIndex(item => item === token);
+    //!== -1, ou seja, encotrou o token na blacklist
+    //como essa blacklist vai crescendo indefinidamente é necessário usar ou método ou limpar a mesma.
+    if (index !== -1) return res.status(401).end();
+
+    jwt.verify(token, SECRET, (err, decoded) =>{
+        if(err) return res.status(401).end();
+        req.useId = decoded.useId;
+        //o next informa que é para executar as proximas camadas/funções
+        next();
+    })
+}
+
+//criando uma rota para login
+app.post('/login', (req, res) => {
+    if (req.body.user === 'admin' && req.body.password === 'admin'){
+        //os dados de user e password conferem então
+        //o primeiro parametro identifica minimamente o usuario
+        //o segundo parametro é a senha da assinatura
+        //o terceira parametro são as opções, que nesse caso foi colocado um tempo de expiração para o token
+        const token = jwt.sign({useId: 1}, SECRET, {expiresIn: 300});
+        //o front precisa guardar para as requisições
+        return res.json({auth: true, token});
+    }
+    res.status(401).end();
+})
+
+//rota logout
+//no lado do front o token que poderá esta armazenado em um cookie ou localstore podera ser
+//..apagado e no back esse token poderá ser colocado em uma blacklist
+//a backlist usada é apenas um exemplo simples
+const backlist = [];
+app.post('/logout', (req, res) => {
+    backlist.push(req.headers['x-access-token']);
+    res.end();
+})
+
+//criando uma rota para lista os usuarios, async por causa do banco
+//colocando a verifyJWT para deixar a rota segura
+//IMPORTANT: É NECESSÁRIO PARA O TOKEN PELO HEADERS PARA TER ACESSO A ROTA
+//...USANDO O X-ACCESS-TOKEN E NO VALUE O TOKEN
+app.get("/users", verifyJWT, async (req, res) => {
+    console.log(req.useId + 'usuário logado');
+    const users = await db.selectUsers();
+    res.json(users);
+})
+
 //criando uma rota para lista apenas usuario
 //os : informa que será passado um parametro genérico.
 app.get("/users/:id", async (req, res) => {
@@ -37,11 +92,7 @@ app.get("/users/:id", async (req, res) => {
     const user = await db.selectUser(req.params.id);
     res.json(user);
 })
-//criando uma rota para lista os usuarios, async por causa do banco
-app.get("/users", async (req, res) => {
-    const users = await db.selectUsers();
-    res.json(users);
-})
+
 
 //rota para cadastro
 app.post("/users", async (req, res) => {
