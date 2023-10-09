@@ -3,7 +3,8 @@ require("dotenv").config();
 
 const db = require("./db");
 
-const port = process.env.PORT;
+//escutando ambas as porta 4000 e 3000
+const port = process.env.PORT || 3000;
 
 const express = require('express');
 
@@ -13,8 +14,16 @@ const SECRET = 'admin';
 
 //para resolver o problema na comunicação backend com o front
 const cors = require('cors');
+// Configuração do middleware CORS
+const corsOptions = {
+    origin: 'http://localhost:3000', // Substitua pelo endereço do seu front-end
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // Permite enviar cookies e cabeçalhos de autenticação
+};
 
 const app = express();
+
+app.use(cors(corsOptions));
 
 //permite solicitações de todas as origem
 //importante colocar restrições quando na produção.
@@ -37,14 +46,14 @@ app.get("/", (req, res) => {
 //função para utilizar nas rotas seguras
 function verifyJWT(req, res, next) {
     const token = req.headers['x-access-token'];
-    
+
     const index = backlist.findIndex(item => item === token);
     //!== -1, ou seja, encotrou o token na blacklist
     //como essa blacklist vai crescendo indefinidamente é necessário usar ou método ou limpar a mesma.
     if (index !== -1) return res.status(401).end();
 
-    jwt.verify(token, SECRET, (err, decoded) =>{
-        if(err) return res.status(401).end();
+    jwt.verify(token, SECRET, (err, decoded) => {
+        if (err) return res.status(401).end();
         req.useId = decoded.useId;
         //o next informa que é para executar as proximas camadas/funções
         next();
@@ -53,16 +62,17 @@ function verifyJWT(req, res, next) {
 
 //criando uma rota para login
 app.post('/login', (req, res) => {
-    if (req.body.user === 'admin' && req.body.password === 'admin'){
+    if (req.body.user === 'admin@admin.com' && req.body.password === 'admin') {
         //os dados de user e password conferem então
         //o primeiro parametro identifica minimamente o usuario
         //o segundo parametro é a senha da assinatura
         //o terceira parametro são as opções, que nesse caso foi colocado um tempo de expiração para o token
-        const token = jwt.sign({useId: 1}, SECRET, {expiresIn: 300});
+        const token = jwt.sign({ useId: 1 }, SECRET, { expiresIn: 300 });
         //o front precisa guardar para as requisições
-        return res.json({auth: true, token});
+        return res.json({ auth: true, token });
     }
-    res.status(401).end();
+    return res.json({ error: "E-mail ou senha inválido"});
+    // res.status(401).end();
 })
 
 //rota logout
@@ -85,37 +95,39 @@ app.get("/users", verifyJWT, async (req, res) => {
     res.json(users);
 })
 
+
+
 //criando uma rota para lista apenas usuario
 //os : informa que será passado um parametro genérico.
-app.get("/users/:id", async (req, res) => {
-                                //passando o id da url para a função pesquisar no banco.
-    const user = await db.selectUser(req.params.id);
-    res.json(user);
-})
+// app.get("/users/:id", async (req, res) => {
+//     //passando o id da url para a função pesquisar no banco.
+//     const user = await db.selectUser(req.params.id);
+//     res.json(user);
+// })
 
 
 //rota para cadastro
-app.post("/users", async (req, res) => {
-    await db.insertUser(req.body);
-    //para demostrar que os dados foi cadastrado com sucesso usa-se o 201
-    res.sendStatus(201);
-})
+// app.post("/users", async (req, res) => {
+//     await db.insertUser(req.body);
+//     //para demostrar que os dados foi cadastrado com sucesso usa-se o 201
+//     res.sendStatus(201);
+// })
 
 //rota para atualização
-app.patch("/users/:id", async (req, res) => {
-    //pegando o id com o params e os dados do cliente no body
-    await db.updateUser(req.params.id, req.body);
-    //para demostrar que os dados foi atualizado 200
-    res.sendStatus(200);
-})
+// app.patch("/users/:id", async (req, res) => {
+//     //pegando o id com o params e os dados do cliente no body
+//     await db.updateUser(req.params.id, req.body);
+//     //para demostrar que os dados foi atualizado 200
+//     res.sendStatus(200);
+// })
 
 //rota para excluir
-app.delete("/users/:id", async (req, res) => {
-    //pegando o id com o params e os dados do cliente no body
-    await db.deleteUser(req.params.id);
-    //para demostrar que os dados foi 204
-    res.sendStatus(204);
-})
+// app.delete("/users/:id", async (req, res) => {
+//     //pegando o id com o params e os dados do cliente no body
+//     await db.deleteUser(req.params.id);
+//     //para demostrar que os dados foi 204
+//     res.sendStatus(204);
+// })
 
 //o server esta escutando na porta informada no .env
 app.listen(port);

@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { data } from '../../data';
+import { auth } from '../../auth';
 import { useState } from "react";
 
 // const validationSchema = yup.object({
@@ -27,18 +27,13 @@ const FormularioLogin = () => {
     //         console.log(JSON.stringify(values, null, 2));
     //     },
     // });
+    const [email, setEmail] = useState("admin@admin.com");
+    const [senha, setSenha] = useState("admin");
 
     async function buscaDataUser() {
-        const listaUsuarios = await data.validaUsuario();
-        listaUsuarios.forEach(usuario => {
-            if (email === usuario._email && senha === usuario._password) {
-                window.location.href = "http://localhost:3000/"
-            }
-        });
+        auth.validaUsuario(email, senha);
     }
 
-    const [email, setEmail] = useState("");
-    const [senha, setSenha] = useState("");
 
     return (
         <form onSubmit={event => {
