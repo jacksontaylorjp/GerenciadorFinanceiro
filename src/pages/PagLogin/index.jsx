@@ -1,9 +1,10 @@
-import {Container, Grid, Typography, Link } from "@mui/material";
+import { Container, Grid, Typography, Link } from "@mui/material";
 import '@fontsource/roboto/400.css';
 import FormularioLogin from "componentes/FormularioLogin";
+
 const PagLogin = () => {
-    return(
-        <Container 
+    return (
+        <Container
             maxWidth="xm"
             sx={{
                 display: "flex",
@@ -19,14 +20,14 @@ const PagLogin = () => {
                 alignItems="center"
             >
                 <img src="https://cdn-icons-png.flaticon.com/128/871/871589.png" alt="logo"></img>
-                <Typography 
+                <Typography
                     variant="h4"
                     component="h1"
                 >
                     Faça seu login
                 </Typography>
                 <FormularioLogin />
-                <Link 
+                <Link
                     href="#"
                     marginTop={1}
                 >

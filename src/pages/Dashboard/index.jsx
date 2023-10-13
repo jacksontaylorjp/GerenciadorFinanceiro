@@ -19,11 +19,12 @@ import DespesasIcon from '@mui/icons-material/MoneyOff';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import { Accordion, AccordionDetails, AccordionSummary, Badge, MenuItem} from '@mui/material';
 import BodyDashboard from 'componentes/BodyDashboard';
-import { AccountCircle } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowDoubleRight from '@mui/icons-material/KeyboardDoubleArrowRight';
 import ModalAddReceita from 'componentes/ModalAddReceitas';
 import ModalAddDespesas from 'componentes/ModalAddDespesas';
+import AccountMenu from 'componentes/AccountMenu';
+
 
 //INÍCIO DA CUSTOMIZAÇÃO GRÁFICA
 const drawerWidth = 240;
@@ -148,6 +149,8 @@ const Dashboard = () => {
 
   };
 
+
+
   return (
     <>
     <ModalAddReceita 
@@ -191,8 +194,6 @@ const Dashboard = () => {
             Dashboard
           </Typography>
 
-
-
           {/* icone notificação */}
           <MenuItem>
 
@@ -207,16 +208,8 @@ const Dashboard = () => {
             </IconButton>
 
             {/* icone conta */}
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="primary-search-account-menu"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-
+              <AccountMenu/>
+              
           </MenuItem>
         </Toolbar>
       </AppBar>

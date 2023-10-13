@@ -1,6 +1,4 @@
-
-
-async function validaUsuario(user, password) {
+async function validateUser(user, password) {
     const response = await fetch(`http://localhost:4000/login`, {
         method: 'POST',
         headers: {
@@ -13,7 +11,6 @@ async function validaUsuario(user, password) {
     })
     const resConv = await response.json();
     if (response.status === 200 && resConv.auth === true) {
-        console.log("ok")
         sessionStorage.setItem("token", resConv.token);
         window.location.href = "http://localhost:3000/dashboard";
         return;
@@ -38,9 +35,19 @@ async function check() {
     return response.status === 200
 }
 
+async function logoutUser() {
+    const response = await fetch('http://localhost:4000/logout',{
+        method: 'POST'
+    })
+    sessionStorage.removeItem("token");
+    window.location.reload();
+    return response
+}
+
 
 
 export const auth = {
-    validaUsuario,
-    check
+    validateUser,
+    check,
+    logoutUser
 }

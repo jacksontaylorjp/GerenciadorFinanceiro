@@ -29,21 +29,7 @@ const BodyDashboard = () => {
                             <TableLatestMov />
                         </Paper>
                     </Col>
-                    <Col>
-                        <Title level={3}>teste</Title>
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                // height: 300,
-                            }}
-                            elevation={2}
-                        >
-                            {/* ultimas movimentações */}
-                            <TableLatestMov />
-                        </Paper>
-                    </Col>
+                    
                 </Row>
             </Grid>
 

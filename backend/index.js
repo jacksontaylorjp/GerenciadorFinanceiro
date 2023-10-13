@@ -38,7 +38,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.json(
         {
-            message: "Funcionando"
+            message: "Funcionando",
         }
     )
 })
@@ -49,7 +49,7 @@ function verifyJWT(req, res, next) {
 
     const index = backlist.findIndex(item => item === token);
     //!== -1, ou seja, encotrou o token na blacklist
-    //como essa blacklist vai crescendo indefinidamente é necessário usar ou método ou limpar a mesma.
+    //como essa blacklist vai crescendo indefinidamente é necessário usar um método ou limpar a mesma.
     if (index !== -1) return res.status(401).end();
 
     jwt.verify(token, SECRET, (err, decoded) => {
@@ -60,18 +60,36 @@ function verifyJWT(req, res, next) {
     })
 }
 
+//criando uma rota para lista os usuarios, async por causa do banco
+//colocando a verifyJWT para deixar a rota segura
+//IMPORTANT: É NECESSÁRIO PARA O TOKEN PELO HEADERS PARA TER ACESSO A ROTA
+//...USANDO O X-ACCESS-TOKEN E NO VALUE O TOKEN
+app.get("/users", verifyJWT, async (req, res) => {
+    console.log('usuário ' + req.useId + ' está logado');
+    const users = await db.selectUsers();
+    res.json(users);
+})
+
+
 //criando uma rota para login
-app.post('/login', (req, res) => {
-    if (req.body.user === 'admin@admin.com' && req.body.password === 'admin') {
-        //os dados de user e password conferem então
-        //o primeiro parametro identifica minimamente o usuario
-        //o segundo parametro é a senha da assinatura
-        //o terceira parametro são as opções, que nesse caso foi colocado um tempo de expiração para o token
-        const token = jwt.sign({ useId: 1 }, SECRET, { expiresIn: 300 });
-        //o front precisa guardar para as requisições
-        return res.json({ auth: true, token });
+app.post('/login', async (req, res) => {
+    const AllUsers = await db.selectUsers();
+    try {
+        AllUsers.forEach(user => {
+            if (req.body.user === user._email && req.body.password === user._password) {
+                //os dados de user e password conferem então
+                //o primeiro parametro identifica minimamente o usuario
+                //o segundo parametro é a senha da assinatura
+                //o terceira parametro são as opções, que nesse caso foi colocado um tempo de expiração para o token
+                const token = jwt.sign({ useId: user._name }, SECRET, { expiresIn: 900 });
+                //o front precisa guardar para as requisições
+                return res.json({ auth: true, token });
+            }
+        });
+        return res.json({ error: "E-mail ou senha inválido" });
+    } catch (e) {
+        console.log(e.message)
     }
-    return res.json({ error: "E-mail ou senha inválido"});
     // res.status(401).end();
 })
 
@@ -85,15 +103,6 @@ app.post('/logout', (req, res) => {
     res.end();
 })
 
-//criando uma rota para lista os usuarios, async por causa do banco
-//colocando a verifyJWT para deixar a rota segura
-//IMPORTANT: É NECESSÁRIO PARA O TOKEN PELO HEADERS PARA TER ACESSO A ROTA
-//...USANDO O X-ACCESS-TOKEN E NO VALUE O TOKEN
-app.get("/users", verifyJWT, async (req, res) => {
-    console.log(req.useId + 'usuário logado');
-    const users = await db.selectUsers();
-    res.json(users);
-})
 
 
 
