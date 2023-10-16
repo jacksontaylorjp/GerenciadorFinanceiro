@@ -70,10 +70,18 @@ async function deleteUser (id){
     return await client.query(sql, values);
 }
 
+async function insertReceita(receita){
+    const client = await connect();
+    const sql = "INSERT INTO receita (tipo, datarecebimento, descricao, valor, id_user)values($1, $2, $3, $4, $5) ;"
+    const values = [receita.tipo, receita.datarecebimento, receita.descricao, receita.valor, receita.id_user];
+    return await client.query(sql, values);
+}
+
 module.exports = {
     selectUsers,
     selectUser,
     insertUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    insertReceita
 }

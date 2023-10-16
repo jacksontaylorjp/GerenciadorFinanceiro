@@ -104,6 +104,13 @@ app.post('/logout', (req, res) => {
 })
 
 
+// rota para cadastro de receita
+//APÓS VERIFICAR A INSERÇÃO CORRETA COLOCAR A VALIDAÇÃO VIA TOKEN
+app.post("/insert_receita", verifyJWT,async (req, res) => {
+    await db.insertReceita(req.body.receita);
+    //para demostrar que os dados foi cadastrado com sucesso usa-se o 201
+    res.sendStatus(201);
+})
 
 
 //criando uma rota para lista apenas usuario

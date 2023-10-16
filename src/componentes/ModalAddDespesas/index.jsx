@@ -9,6 +9,7 @@ const ModalAddDespesas = ({ titulo, open, onOk, onCancel }) => {
   // };
 
   return (
+    //está dentro de dashboard
     <Modal
       title={titulo}
       open={open}
@@ -62,7 +63,7 @@ const ModalAddDespesas = ({ titulo, open, onOk, onCancel }) => {
           ]}
         >
           <DatePicker
-            placeholder="Selecione a data"   
+            placeholder="Selecione a data"
           />
         </Form.Item>
 

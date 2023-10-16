@@ -1,5 +1,5 @@
 import { CircularProgress } from "@mui/material";
-import { auth } from "auth";
+import { auth2 } from "auth";
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
@@ -14,7 +14,7 @@ const RotaProtegida = () => {
             return false;
         }
         //verificar se é válido e se está expirado
-        const checkAuth = await auth.check();
+        const checkAuth = await auth2.check();
         if (!checkAuth) {
             sessionStorage.removeItem("token");
 

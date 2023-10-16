@@ -1,4 +1,5 @@
-async function validateUser(user, password) {
+//mudar nome login
+async function login(user, password) {
     const response = await fetch(`http://localhost:4000/login`, {
         method: 'POST',
         headers: {
@@ -46,8 +47,8 @@ async function logoutUser() {
 
 
 
-export const auth = {
-    validateUser,
+export const auth2 = {
+    login,
     check,
     logoutUser
 }

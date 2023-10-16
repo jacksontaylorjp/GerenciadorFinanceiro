@@ -10,7 +10,7 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import { auth } from "auth";
+import { auth2 } from "auth";
 
 const AccountMenu = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -93,7 +93,7 @@ const AccountMenu = () => {
                     </ListItemIcon>
                     Settings
                 </MenuItem>
-                <MenuItem onClick={auth.logoutUser}>
+                <MenuItem onClick={auth2.logoutUser}>
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>

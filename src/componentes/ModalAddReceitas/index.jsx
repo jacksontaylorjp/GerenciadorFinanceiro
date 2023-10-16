@@ -1,4 +1,6 @@
-import { DatePicker, Divider, Form, Input, InputNumber, Modal, Select } from 'antd';
+import { MenuItem, Select, TextField } from '@mui/material';
+import { Divider, Modal } from 'antd';
+import React, { useState } from 'react';
 
 
 const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
@@ -8,97 +10,94 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
   //   padding: '8px 0',
   // };
 
+  //usando apenas um useState para os campos do formulário
+  const [fieldReceita, setFieldReceita] = useState({
+    tipo: "", data: "", descricao: "", valor: ""
+  })
+
+  function handlerChange(e) {
+    const newData = { ...fieldReceita }
+    const value = e.target.value
+    const field = e.target.name
+
+    switch (field) {
+      case "tipo":
+        newData.tipo = value;
+        break;
+      case "data":
+        newData.data = value;
+        break;
+      case "descricao":
+        newData.descricao = value;
+        break;
+      case "valor":
+        newData.valor = value;
+        break;
+
+      default:
+        break;
+    }
+    setFieldReceita(newData);
+    console.log(newData);
+
+  }
+
+  function handlerSubmit() {
+    console.log(fieldReceita);
+  }
+
   return (
+    //está dentro de dashboard
     <Modal
       title={titulo}
       open={open}
-      onOk={onOk}
+      //VER COMO VAI CHAMAR O ONOK PARA FECHAR O MODAL
+      onOk={handlerSubmit}
       onCancel={onCancel}
     >
       <Divider orientation="left"></Divider>
-      <Form
-        name="basic"
-        labelCol={{
-          span: 4,
-        }}
-        wrapperCol={{
-          span: 15,
-        }}
-        style={{
-          // maxWidth: 600,
-        }}
-        initialValues={{
-          // remember: true,
-        }}
-        // onFinish={onFinish}
-        // onFinishFailed={onFinishFailed}
-        autoComplete="off"
+      <Select
+        label="Tipo"
+        name='tipo'
+        variant='outlined'
+        value={fieldReceita.tipo}
+        fullWidth
+        onChange={handlerChange}
       >
-        <Form.Item
-          label="Tipo:"
-          name="tipo"
-          rules={[
-            {
-              required: true,
-              message: 'Informe o tipo de receita!',
-            },
-          ]}
-        >
-          <Select
-            defaultValue=""
-            style={{ width: 120 }}
-            options={[{ value: 'geral', label: 'Geral' }]}
-          />
-        </Form.Item>
+        <MenuItem value="Geral">Geral</MenuItem>
+        <MenuItem value="Outros">Outros</MenuItem>
+      </Select>
+      <TextField
+        id="data"
+        label="Data"
+        name="data"
+        variant="outlined"
+        margin="normal"
+        type="date"
+        fullWidth
+        onChange={event => handlerChange(event)}
+      />
+      <TextField
+        id="descricao"
+        label="Descrição"
+        name="descricao"
+        variant="outlined"
+        margin="normal"
+        type="text"
+        fullWidth
+        onChange={event => handlerChange(event)}
+      />
+      <TextField
+        id="valor"
+        label="Valor"
+        name="valor"
+        variant="outlined"
+        margin="normal"
+        type="number"
+        fullWidth
+        onChange={event => handlerChange(event)}
+      />
 
-        <Form.Item
-          label="Data"
-          name="data"
-          rules={[
-            {
-              required: true,
-              message: 'Informe a data de recebimento do recurso.',
-            },
-          ]}
-        >
-          <DatePicker
-            placeholder="Selecione a data"   
-          />
-        </Form.Item>
-
-        <Form.Item
-          label="Descrição"
-          name="descricao"
-          rules={[
-            {
-              required: true,
-              message: 'Informe a descrição da receita',
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="R$"
-          name="valor"
-          rules={[
-            {
-              required: true,
-              message: 'Informe o valor em R$',
-            },
-          ]}
-        >
-          <InputNumber
-            defaultValue={0}
-            formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-          // onChange={onChange}
-          />
-        </Form.Item>
-
-
-      </Form>
     </Modal>
   );
 };
