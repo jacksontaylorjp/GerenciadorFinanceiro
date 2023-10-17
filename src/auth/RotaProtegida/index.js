@@ -24,7 +24,6 @@ const RotaProtegida = () => {
     }
     useEffect(() => {
         isUserAuthenticated().then((res) => {
-            console.log(res);
             setHasUser(res);
             setIsLoading(false);
         })

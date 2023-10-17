@@ -1,7 +1,8 @@
 import { MenuItem, Select, TextField } from '@mui/material';
 import { Divider, Modal } from 'antd';
 import React, { useState } from 'react';
-
+import {data} from '../../data';
+import {auth2} from '../../auth'
 
 const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
 
@@ -9,10 +10,10 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
   //   background: '#0092ff',
   //   padding: '8px 0',
   // };
-
+  const user_id = sessionStorage.getItem("user_id");
   //usando apenas um useState para os campos do formulário
   const [fieldReceita, setFieldReceita] = useState({
-    tipo: "", data: "", descricao: "", valor: ""
+    tipo: "", datarecebimento: "", descricao: "", valor: "", id_user: user_id
   })
 
   function handlerChange(e) {
@@ -25,7 +26,7 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
         newData.tipo = value;
         break;
       case "data":
-        newData.data = value;
+        newData.datarecebimento = value;
         break;
       case "descricao":
         newData.descricao = value;
@@ -38,12 +39,11 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
         break;
     }
     setFieldReceita(newData);
-    console.log(newData);
 
   }
 
   function handlerSubmit() {
-    console.log(fieldReceita);
+    data.sendDataReceita(fieldReceita);
   }
 
   return (

@@ -83,7 +83,7 @@ app.post('/login', async (req, res) => {
                 //o terceira parametro são as opções, que nesse caso foi colocado um tempo de expiração para o token
                 const token = jwt.sign({ useId: user._name }, SECRET, { expiresIn: 900 });
                 //o front precisa guardar para as requisições
-                return res.json({ auth: true, token });
+                return res.json({ auth: true, token, user_id: user.id });
             }
         });
         return res.json({ error: "E-mail ou senha inválido" });
