@@ -1,8 +1,7 @@
 import { MenuItem, Select, TextField } from '@mui/material';
 import { Divider, Modal } from 'antd';
 import React, { useState } from 'react';
-import {data} from '../../data';
-import {auth2} from '../../auth'
+import { data } from '../../data';
 
 const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
 
@@ -13,8 +12,15 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
   const user_id = sessionStorage.getItem("user_id");
   //usando apenas um useState para os campos do formulário
   const [fieldReceita, setFieldReceita] = useState({
-    tipo: "", datarecebimento: "", descricao: "", valor: "", id_user: user_id
+    tipo: "geral", datarecebimento: "", descricao: "", valor: "", id_user: user_id
   })
+
+  const [error, setError] = useState({
+    datarecebimento: { valid: true, msg: "" },
+    descricao: { valid: true, msg: "" },
+    valor: { valid: true, msg: "" },
+  }
+  );
 
   function handlerChange(e) {
     const newData = { ...fieldReceita }
@@ -25,12 +31,15 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
       case "tipo":
         newData.tipo = value;
         break;
-      case "data":
+
+      case "datarecebimento":
         newData.datarecebimento = value;
         break;
+
       case "descricao":
         newData.descricao = value;
         break;
+
       case "valor":
         newData.valor = value;
         break;
@@ -43,7 +52,47 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
   }
 
   function handlerSubmit() {
-    data.sendDataReceita(fieldReceita);
+    if ((error.datarecebimento.valid && fieldReceita.datarecebimento !== "") &&
+      (error.descricao.valid && fieldReceita.descricao !== "") &&
+      (error.valor.valid && fieldReceita.valor !== "")) {
+      data.sendDataReceita(fieldReceita);
+      console.log("201")
+    } else {
+      console.log("Error - 400");
+    }
+    console.log(fieldReceita);
+  }
+
+  function hError(campo, campoError ) {
+    if (campo === "") {
+      setError((prevError) => ({
+        ...prevError,
+        [campoError]: { valid: false, msg: "*Campo obrigatório" }
+      }))
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        [campoError]: { valid: true, msg: "" }
+      }));
+    }
+  }
+
+  function handlerError(e) {
+    const field = e.target.name
+    switch (field) {
+      case "datarecebimento":
+        hError(fieldReceita.datarecebimento, "datarecebimento")
+        break;
+      case "descricao":
+        hError(fieldReceita.descricao, "descricao")
+        break;
+      case "valor":
+        hError(fieldReceita.valor, "valor")
+        break;
+
+      default:
+        break;
+    }
   }
 
   return (
@@ -56,26 +105,31 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
       onCancel={onCancel}
     >
       <Divider orientation="left"></Divider>
+      {/* <InputLabel id="demo-simple-select-label">Tipo</InputLabel> */}
       <Select
-        label="Tipo"
         name='tipo'
         variant='outlined'
         value={fieldReceita.tipo}
         fullWidth
         onChange={handlerChange}
+        placeholder=''
       >
-        <MenuItem value="Geral">Geral</MenuItem>
-        <MenuItem value="Outros">Outros</MenuItem>
+        <MenuItem value="geral">Geral</MenuItem>
+        <MenuItem value="salario">Salário</MenuItem>
+        <MenuItem value="outros">Outros</MenuItem>
       </Select>
       <TextField
         id="data"
-        label="Data"
-        name="data"
+        // label="Data"
+        name="datarecebimento"
         variant="outlined"
         margin="normal"
         type="date"
         fullWidth
         onChange={event => handlerChange(event)}
+        onBlur={event => handlerError(event)}
+        error={!error.datarecebimento.valid}
+        helperText={error.datarecebimento.msg}
       />
       <TextField
         id="descricao"
@@ -86,6 +140,9 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
         type="text"
         fullWidth
         onChange={event => handlerChange(event)}
+        onBlur={event => handlerError(event)}
+        error={!error.descricao.valid}
+        helperText={error.descricao.msg}
       />
       <TextField
         id="valor"
@@ -96,6 +153,9 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
         type="number"
         fullWidth
         onChange={event => handlerChange(event)}
+        onBlur={event => handlerError(event)}
+        error={!error.valor.valid}
+        helperText={error.valor.msg}
       />
 
     </Modal>

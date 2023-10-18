@@ -104,7 +104,7 @@ const Dashboard = () => {
     setIsModalOpenModalAddReceita(true);
   };
 
-  const handleOkModalAddReceita = () => {
+  const  handleOkModalAddReceita = () => {
     setIsModalOpenModalAddReceita(false);
   };
   const handleCancelModalAddReceita = () => {
@@ -155,7 +155,7 @@ const Dashboard = () => {
     <>
     <ModalAddReceita 
                 open={isModalOpenModalAddReceita} 
-                onOk={handleOkModalAddReceita} 
+                // onOk={handleOkModalAddReceita} 
                 onCancel={handleCancelModalAddReceita}
                 titulo="Receitas"
               />

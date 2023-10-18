@@ -14,7 +14,6 @@ async function sendDataReceita(receita){
             "receita":receita
         })
         })
-        console.log(response)
         return response;
     } catch (error) {
         console.log(error.message);
