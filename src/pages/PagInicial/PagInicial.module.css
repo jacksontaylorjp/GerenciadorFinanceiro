@@ -1,0 +1,13 @@
+.divPagInicial{
+    align-items: center;
+    background-image: url("/public/imagens/background-pag-inicial.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    gap: 32px;
+    justify-content: center;
+    width: 100vw;
+}
