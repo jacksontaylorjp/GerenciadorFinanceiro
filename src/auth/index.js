@@ -15,7 +15,6 @@ async function login(user, password) {
         const resConv = await response.json();
         if (response.status === 200 && resConv.auth === true) {
             sessionStorage.setItem("token", resConv.token);
-            sessionStorage.setItem("user_id", resConv.user_id);
             window.location.href = "http://localhost:3000/dashboard";
             return;
         }

@@ -55,6 +55,7 @@ function verifyJWT(req, res, next) {
     jwt.verify(token, SECRET, (err, decoded) => {
         if (err) return res.status(401).end();
         req.useId = decoded.useId;
+        req.id = decoded.id;
         //o next informa que é para executar as proximas camadas/funções
         next();
     })
@@ -81,9 +82,9 @@ app.post('/login', async (req, res) => {
                 //o primeiro parametro identifica minimamente o usuario
                 //o segundo parametro é a senha da assinatura
                 //o terceira parametro são as opções, que nesse caso foi colocado um tempo de expiração para o token
-                const token = jwt.sign({ useId: user._name }, SECRET, { expiresIn: 900 });
+                const token = jwt.sign({ useId: user._name, id: user.id }, SECRET, { expiresIn: 900 });
                 //o front precisa guardar para as requisições
-                return res.json({ auth: true, token, user_id: user.id });
+                return res.json({ auth: true, token, user_id: user.id , id: user.id });
             }
         });
         return res.json({ error: "E-mail ou senha inválido" });
@@ -107,7 +108,7 @@ app.post('/logout', (req, res) => {
 // rota para cadastro de receita
 //APÓS VERIFICAR A INSERÇÃO CORRETA COLOCAR A VALIDAÇÃO VIA TOKEN
 app.post("/insert_receita", verifyJWT,async (req, res) => {
-    await db.insertReceita(req.body.receita);
+    await db.insertReceita(req.body.receita, req.id);
     //para demostrar que os dados foi cadastrado com sucesso usa-se o 201
     res.sendStatus(201);
 })

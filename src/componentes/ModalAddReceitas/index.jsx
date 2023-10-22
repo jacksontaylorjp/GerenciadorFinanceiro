@@ -9,10 +9,9 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
   //   background: '#0092ff',
   //   padding: '8px 0',
   // };
-  const user_id = sessionStorage.getItem("user_id");
   //usando apenas um useState para os campos do formulário
   const [fieldReceita, setFieldReceita] = useState({
-    tipo: "geral", datarecebimento: "", descricao: "", valor: "", id_user: user_id
+    tipo: "geral", datarecebimento: "", descricao: "", valor: ""
   })
 
   const [error, setError] = useState({

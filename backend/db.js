@@ -70,10 +70,10 @@ async function deleteUser (id){
     return await client.query(sql, values);
 }
 
-async function insertReceita(receita){
+async function insertReceita(receita, id){
     const client = await connect();
     const sql = "INSERT INTO receita (tipo, datarecebimento, descricao, valor, id_user)values($1, $2, $3, $4, $5) ;"
-    const values = [receita.tipo, receita.datarecebimento, receita.descricao, receita.valor, receita.id_user];
+    const values = [receita.tipo, receita.datarecebimento, receita.descricao, receita.valor, id];
     return await client.query(sql, values);
 }
 
