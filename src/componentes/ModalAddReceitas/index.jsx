@@ -1,14 +1,18 @@
 import { MenuItem, Select, TextField } from '@mui/material';
 import { Divider, Modal } from 'antd';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { data } from '../../data';
+import { StatusModalContext } from 'context/StatusModalContext';
 
-const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
+const ModalAddReceitas = ({ titulo }) => {
 
   // const style = {
   //   background: '#0092ff',
   //   padding: '8px 0',
   // };
+
+  const { openModal, toggleModalReceita } = useContext(StatusModalContext);
+
   //usando apenas um useState para os campos do formulário
   const [fieldReceita, setFieldReceita] = useState({
     tipo: "geral", datarecebimento: "", descricao: "", valor: ""
@@ -47,22 +51,10 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
         break;
     }
     setFieldReceita(newData);
-
   }
 
-  function handlerSubmit() {
-    if ((error.datarecebimento.valid && fieldReceita.datarecebimento !== "") &&
-      (error.descricao.valid && fieldReceita.descricao !== "") &&
-      (error.valor.valid && fieldReceita.valor !== "")) {
-      data.sendDataReceita(fieldReceita);
-      console.log("201")
-    } else {
-      console.log("Error - 400");
-    }
-    console.log(fieldReceita);
-  }
 
-  function hError(campo, campoError ) {
+  function hError(campo, campoError) {
     if (campo === "") {
       setError((prevError) => ({
         ...prevError,
@@ -94,14 +86,35 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
     }
   }
 
+  function handlerSubmit() {
+    if ((error.datarecebimento.valid && fieldReceita.datarecebimento !== "") &&
+      (error.descricao.valid && fieldReceita.descricao !== "") &&
+      (error.valor.valid && fieldReceita.valor !== "")) {
+      console.log(fieldReceita)
+      data.sendDataReceita(fieldReceita);
+      console.log("201")
+      toggleModalReceita()
+      setFieldReceita((e) => ({
+        ...e,
+        tipo: "geral",
+        datarecebimento: "",
+        descricao: "",
+        valor: ""
+
+      }))
+    } else {
+      console.log(fieldReceita)
+      console.log("Error - 400");
+    }
+  }
+
   return (
     //está dentro de dashboard
     <Modal
       title={titulo}
-      open={open}
-      //VER COMO VAI CHAMAR O ONOK PARA FECHAR O MODAL
+      open={openModal.receita}
       onOk={handlerSubmit}
-      onCancel={onCancel}
+      onCancel={toggleModalReceita}
     >
       <Divider orientation="left"></Divider>
       {/* <InputLabel id="demo-simple-select-label">Tipo</InputLabel> */}
@@ -125,6 +138,7 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
         margin="normal"
         type="date"
         fullWidth
+        value={fieldReceita.datarecebimento}
         onChange={event => handlerChange(event)}
         onBlur={event => handlerError(event)}
         error={!error.datarecebimento.valid}
@@ -138,6 +152,7 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
         margin="normal"
         type="text"
         fullWidth
+        value={fieldReceita.descricao}
         onChange={event => handlerChange(event)}
         onBlur={event => handlerError(event)}
         error={!error.descricao.valid}
@@ -151,6 +166,7 @@ const ModalAddReceitas = ({ titulo, open, onOk, onCancel }) => {
         margin="normal"
         type="number"
         fullWidth
+        value={fieldReceita.valor}
         onChange={event => handlerChange(event)}
         onBlur={event => handlerError(event)}
         error={!error.valor.valid}

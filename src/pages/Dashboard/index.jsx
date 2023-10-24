@@ -25,6 +25,8 @@ import ModalAddReceita from 'componentes/ModalAddReceitas';
 import ModalAddDespesas from 'componentes/ModalAddDespesas';
 import AccountMenu from 'componentes/AccountMenu';
 
+import { useContext } from 'react';
+import { StatusModalContext } from 'context/StatusModalContext';
 
 //INÍCIO DA CUSTOMIZAÇÃO GRÁFICA
 const drawerWidth = 240;
@@ -98,31 +100,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const Dashboard = () => {
   const theme = useTheme();
 
-  //ModalAddReceita
-  const [isModalOpenModalAddReceita, setIsModalOpenModalAddReceita] = React.useState(false);
-  const showModalAddReceita = () => {
-    setIsModalOpenModalAddReceita(true);
-  };
-
-  const  handleOkModalAddReceita = () => {
-    setIsModalOpenModalAddReceita(false);
-  };
-  const handleCancelModalAddReceita = () => {
-    setIsModalOpenModalAddReceita(false);
-  };
-  //FIM ModalAddReceita
-  const [isModalOpenModalAddDespesa, setIsModalOpenModalAddDespesa] = React.useState(false);
-  const showModalAddDespesa = () => {
-    setIsModalOpenModalAddDespesa(true);
-  };
-
-  const handleOkModalAddDespesa = () => {
-    setIsModalOpenModalAddDespesa(false);
-  };
-  const handleCancelModalAddDespesa = () => {
-    setIsModalOpenModalAddDespesa(false);
-  };
-  //FIM ModalAddDespesa
+  const {openModal, toggleModalReceita, toogleModalDespesa} = useContext(StatusModalContext);
 
   const [open, setOpen] = React.useState(false);
   const [expandedAccordionReceitas, setExpandedAccordionReceitas] = React.useState(false);
@@ -154,15 +132,9 @@ const Dashboard = () => {
   return (
     <>
     <ModalAddReceita 
-                open={isModalOpenModalAddReceita} 
-                // onOk={handleOkModalAddReceita} 
-                onCancel={handleCancelModalAddReceita}
                 titulo="Receitas"
               />
     <ModalAddDespesas 
-                open={isModalOpenModalAddDespesa} 
-                onOk={handleOkModalAddDespesa} 
-                onCancel={handleCancelModalAddDespesa}
                 titulo="Despesas"
               />
 
@@ -260,7 +232,7 @@ const Dashboard = () => {
               sx={{
                 ml: open ? 3 : 0,
               }}
-              onClick={showModalAddReceita}
+              onClick={toggleModalReceita}
               >
               {/* icone */}
               <ArrowDoubleRight />
@@ -309,7 +281,7 @@ const Dashboard = () => {
               sx={{
                 ml: open ? 3 : 0,
               }}
-              onClick={showModalAddDespesa}
+              onClick={toogleModalDespesa}
             >
               {/* icone */}
               <ArrowDoubleRight />
