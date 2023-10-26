@@ -27,6 +27,7 @@ import AccountMenu from 'componentes/AccountMenu';
 
 import { useContext } from 'react';
 import { StatusModalContext } from 'context/StatusModalContext';
+import ModalMsg from 'componentes/ModalMsg';
 
 //INÍCIO DA CUSTOMIZAÇÃO GRÁFICA
 const drawerWidth = 240;

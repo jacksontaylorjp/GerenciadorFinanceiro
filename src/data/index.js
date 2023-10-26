@@ -19,7 +19,28 @@ async function sendDataReceita(receita){
         console.log(error.message);
     }
 }
-
+async function sendDataDespesa(despesa){
+    try {
+        const token = sessionStorage.getItem("token");
+        if(!token){
+            return false;
+        }
+        const response = await fetch(`http://localhost:4000/insert_despesa`,{
+            method: 'POST',
+            headers: {
+                "Content-Type":"Application/json",
+                'x-access-token': token
+        },
+        body: JSON.stringify({
+            "despesa":despesa
+        })
+        })
+        return response;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 export const data = {
-    sendDataReceita
+    sendDataReceita,
+    sendDataDespesa
 };

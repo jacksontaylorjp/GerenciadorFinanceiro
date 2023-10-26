@@ -72,8 +72,14 @@ async function deleteUser (id){
 
 async function insertReceita(receita, id){
     const client = await connect();
-    const sql = "INSERT INTO receita (tipo, datarecebimento, descricao, valor, id_user)values($1, $2, $3, $4, $5) ;"
+    const sql = "INSERT INTO receita (tipo, datarecebimento, descricao, valor, user_id)values($1, $2, $3, $4, $5) ;"
     const values = [receita.tipo, receita.datarecebimento, receita.descricao, receita.valor, id];
+    return await client.query(sql, values);
+}
+async function insertDespesa(despesa, id){
+    const client = await connect();
+    const sql = "INSERT INTO despesa (tipo, datavencimento, descricao, valor, user_id)values($1, $2, $3, $4, $5) ;"
+    const values = [despesa.tipo, despesa.datavencimento, despesa.descricao, despesa.valor, id];
     return await client.query(sql, values);
 }
 
@@ -83,5 +89,6 @@ module.exports = {
     insertUser,
     updateUser,
     deleteUser,
-    insertReceita
+    insertReceita,
+    insertDespesa
 }

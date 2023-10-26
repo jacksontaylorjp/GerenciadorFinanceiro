@@ -1,17 +1,12 @@
 import { MenuItem, Select, TextField } from '@mui/material';
-import { Divider, Modal } from 'antd';
-import React, { useContext, useState } from 'react';
+import { Alert, Button, Divider, Modal } from 'antd';
+import React, { createContext, useContext, useState } from 'react';
 import { data } from '../../data';
 import { StatusModalContext } from 'context/StatusModalContext';
+import ModalMsg from 'componentes/ModalMsg';
 
 const ModalAddReceitas = ({ titulo }) => {
-
-  // const style = {
-  //   background: '#0092ff',
-  //   padding: '8px 0',
-  // };
-
-  const { openModal, toggleModalReceita } = useContext(StatusModalContext);
+  const { openModal, toggleModalReceita, toogleModalMsg } = useContext(StatusModalContext);
 
   //usando apenas um useState para os campos do formulário
   const [fieldReceita, setFieldReceita] = useState({
@@ -100,80 +95,84 @@ const ModalAddReceitas = ({ titulo }) => {
         datarecebimento: "",
         descricao: "",
         valor: ""
-
       }))
+      toogleModalMsg()
     } else {
-      console.log(fieldReceita)
+      hError(fieldReceita.datarecebimento, "datarecebimento");
+      hError(fieldReceita.descricao, "descricao");
+      hError(fieldReceita.valor, "valor");
       console.log("Error - 400");
     }
   }
 
   return (
-    //está dentro de dashboard
-    <Modal
-      title={titulo}
-      open={openModal.receita}
-      onOk={handlerSubmit}
-      onCancel={toggleModalReceita}
-    >
-      <Divider orientation="left"></Divider>
-      {/* <InputLabel id="demo-simple-select-label">Tipo</InputLabel> */}
-      <Select
-        name='tipo'
-        variant='outlined'
-        value={fieldReceita.tipo}
-        fullWidth
-        onChange={handlerChange}
-        placeholder=''
+    <>
+      <ModalMsg type='success' msg='Receita adicionada com sucesso!' />
+      {/* //está dentro de dashboard */}
+      <Modal
+        title={titulo}
+        open={openModal.receita}
+        onOk={handlerSubmit}
+        onCancel={toggleModalReceita}
       >
-        <MenuItem value="geral">Geral</MenuItem>
-        <MenuItem value="salario">Salário</MenuItem>
-        <MenuItem value="outros">Outros</MenuItem>
-      </Select>
-      <TextField
-        id="data"
-        // label="Data"
-        name="datarecebimento"
-        variant="outlined"
-        margin="normal"
-        type="date"
-        fullWidth
-        value={fieldReceita.datarecebimento}
-        onChange={event => handlerChange(event)}
-        onBlur={event => handlerError(event)}
-        error={!error.datarecebimento.valid}
-        helperText={error.datarecebimento.msg}
-      />
-      <TextField
-        id="descricao"
-        label="Descrição"
-        name="descricao"
-        variant="outlined"
-        margin="normal"
-        type="text"
-        fullWidth
-        value={fieldReceita.descricao}
-        onChange={event => handlerChange(event)}
-        onBlur={event => handlerError(event)}
-        error={!error.descricao.valid}
-        helperText={error.descricao.msg}
-      />
-      <TextField
-        id="valor"
-        label="Valor"
-        name="valor"
-        variant="outlined"
-        margin="normal"
-        type="number"
-        fullWidth
-        value={fieldReceita.valor}
-        onChange={event => handlerChange(event)}
-        onBlur={event => handlerError(event)}
-        error={!error.valor.valid}
-        helperText={error.valor.msg}
-      />
-
-    </Modal>
+        <Divider orientation="left"></Divider>
+        {/* <InputLabel id="demo-simple-select-label">Tipo</InputLabel> */}
+        <Select
+          name='tipo'
+          variant='outlined'
+          value={fieldReceita.tipo}
+          fullWidth
+          onChange={handlerChange}
+          placeholder=''
+        >
+          <MenuItem value="geral">Geral</MenuItem>
+          <MenuItem value="salario">Salário</MenuItem>
+          <MenuItem value="outros">Outros</MenuItem>
+        </Select>
+        <TextField
+          id="data"
+          // label="Data"
+          name="datarecebimento"
+          variant="outlined"
+          margin="normal"
+          type="date"
+          fullWidth
+          value={fieldReceita.datarecebimento}
+          onChange={event => handlerChange(event)}
+          onBlur={event => handlerError(event)}
+          error={!error.datarecebimento.valid}
+          helperText={error.datarecebimento.msg}
+        />
+        <TextField
+          id="descricao"
+          label="Descrição"
+          name="descricao"
+          variant="outlined"
+          margin="normal"
+          type="text"
+          fullWidth
+          value={fieldReceita.descricao}
+          onChange={event => handlerChange(event)}
+          onBlur={event => handlerError(event)}
+          error={!error.descricao.valid}
+          helperText={error.descricao.msg}
+        />
+        <TextField
+          id="valor"
+          label="Valor"
+          name="valor"
+          variant="outlined"
+          margin="normal"
+          type="number"
+          fullWidth
+          value={fieldReceita.valor}
+          onChange={event => handlerChange(event)}
+          onBlur={event => handlerError(event)}
+          error={!error.valor.valid}
+          helperText={error.valor.msg}
+        />
+      </Modal>
+    </>
   );
 };
 export default ModalAddReceitas;

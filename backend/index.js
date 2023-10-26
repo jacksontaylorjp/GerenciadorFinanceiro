@@ -106,13 +106,18 @@ app.post('/logout', (req, res) => {
 
 
 // rota para cadastro de receita
-//APÓS VERIFICAR A INSERÇÃO CORRETA COLOCAR A VALIDAÇÃO VIA TOKEN
 app.post("/insert_receita", verifyJWT,async (req, res) => {
     await db.insertReceita(req.body.receita, req.id);
     //para demostrar que os dados foi cadastrado com sucesso usa-se o 201
     res.sendStatus(201);
 })
 
+// rota para cadastro de despesa
+app.post("/insert_despesa", verifyJWT,async (req, res) => {
+    await db.insertDespesa(req.body.despesa, req.id);
+    //para demostrar que os dados foi cadastrado com sucesso usa-se o 201
+    res.sendStatus(201);
+})
 
 //criando uma rota para lista apenas usuario
 //os : informa que será passado um parametro genérico.
