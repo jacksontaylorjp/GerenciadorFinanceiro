@@ -1,13 +1,13 @@
 //arquivo relativo a banco de dados
 
-async function connect(){
+async function connect() {
     // //se já estiver conexão ele retorna a conexão ativa
     // if(global.connection){
     //     return global.connection.connect;
     // }
 
     //utilizando método de conexão pool que faz o gerenciamento
-    const {Pool} = require("pg");
+    const { Pool } = require("pg");
     const pool = new Pool({
         connectionString: process.env.CONNECTION_STRING
     })
@@ -26,7 +26,7 @@ async function connect(){
 
 connect();
 
-async function selectUsers (){
+async function selectUsers() {
     //connectando ao banco
     const client = await connect();
     //comando para o banco
@@ -35,7 +35,7 @@ async function selectUsers (){
 }
 
 //listando apenas 1 user
-async function selectUser (id){
+async function selectUser(id) {
     //connectando ao banco
     const client = await connect();
     //comando para o banco, foi passado de forma diferente para evitar ataques.
@@ -43,7 +43,7 @@ async function selectUser (id){
     return res.rows;
 }
 //inserindo user
-async function insertUser (user){
+async function insertUser(user) {
     //connectando ao banco
     const client = await connect();
     const sql = "INSERT INTO users(_name, _email, _password) VALUES ($1, $2, $3);";
@@ -52,7 +52,7 @@ async function insertUser (user){
     return await client.query(sql, values);
 }
 //atualizando usuário
-async function updateUser (id, user){
+async function updateUser(id, user) {
     //connectando ao banco
     const client = await connect();
     const sql = "UPDATE users SET _name=$1, _password=$2 WHERE id=$3";
@@ -61,7 +61,7 @@ async function updateUser (id, user){
     return await client.query(sql, values);
 }
 //atualizando usuário
-async function deleteUser (id){
+async function deleteUser(id) {
     //connectando ao banco
     const client = await connect();
     const sql = "DELETE FROM users WHERE id=$1";
@@ -70,17 +70,66 @@ async function deleteUser (id){
     return await client.query(sql, values);
 }
 
-async function insertReceita(receita, id){
+async function insertReceita(receita, id) {
     const client = await connect();
     const sql = "INSERT INTO receita (tipo, datarecebimento, descricao, valor, user_id)values($1, $2, $3, $4, $5) ;"
     const values = [receita.tipo, receita.datarecebimento, receita.descricao, receita.valor, id];
     return await client.query(sql, values);
 }
-async function insertDespesa(despesa, id){
+async function insertDespesa(despesa, id) {
     const client = await connect();
     const sql = "INSERT INTO despesa (tipo, datavencimento, descricao, valor, user_id)values($1, $2, $3, $4, $5) ;"
     const values = [despesa.tipo, despesa.datavencimento, despesa.descricao, despesa.valor, id];
     return await client.query(sql, values);
+}
+
+//retorna os valores por mes de acordo com o ano informado
+//retorna zero quando a soma naquele mês for zero
+async function selectReceitaYear(id, year) {
+    const client = await connect();
+    const sql = `
+    WITH meses AS (
+        SELECT generate_series(1, 12) as mes -- Cria uma lista de todos os meses (de 1 a 12)
+    )
+    SELECT m.mes as mes, COALESCE(r.valor_total_mensal, 0) as valor_total_mensal
+        FROM meses m
+        LEFT JOIN (
+            SELECT  
+                EXTRACT(MONTH FROM datarecebimento) as mes,
+                SUM(valor) as valor_total_mensal 
+            FROM receita 
+            WHERE EXTRACT(YEAR FROM datarecebimento) = ${year} 
+            AND user_id = ${id} 
+            GROUP BY EXTRACT(MONTH FROM datarecebimento)
+        ) 
+        r ON m.mes = r.mes
+        ORDER BY m.mes;
+    `;
+    const res = await client.query(sql);
+    return res.rows;
+}
+async function selectDespesaYear(id, year) {
+    const client = await connect();
+    const sql = `
+    WITH meses AS (
+        SELECT generate_series(1, 12) as mes -- Cria uma lista de todos os meses (de 1 a 12)
+    )
+    SELECT m.mes as mes, COALESCE(r.valor_total_mensal, 0) as valor_total_mensal
+        FROM meses m
+        LEFT JOIN (
+            SELECT  
+                EXTRACT(MONTH FROM datavencimento) as mes,
+                SUM(valor) as valor_total_mensal 
+            FROM despesa 
+            WHERE EXTRACT(YEAR FROM datavencimento) = ${year} 
+            AND user_id = ${id} 
+            GROUP BY EXTRACT(MONTH FROM datavencimento)
+        ) 
+        r ON m.mes = r.mes
+        ORDER BY m.mes;
+    `;
+    const res = await client.query(sql);
+    return res.rows;
 }
 
 module.exports = {
@@ -90,5 +139,7 @@ module.exports = {
     updateUser,
     deleteUser,
     insertReceita,
-    insertDespesa
+    insertDespesa,
+    selectReceitaYear,
+    selectDespesaYear
 }

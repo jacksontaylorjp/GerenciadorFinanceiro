@@ -1,70 +1,80 @@
 import * as React from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { Typography } from "antd";
+import { DatePicker } from "antd";
 import { Grid, Paper } from "@mui/material";
-
-
-var state = {
-
-  series: [{
-    name: 'Receitas',
-    data: [44, 55, 57, 56, 61, 58, 63, 60, 66, 22, 54, 88],
-    // color: "#228B22"
-  }, {
-    name: 'Despesas',
-    data: [76, 85, 101, 98, 87, 105, 91, 114, 94, 66, 11, 100],
-    // color: "#FF0000"
-  }],
-  options: {
-    chart: {
-      type: 'bar',
-      height: 350
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: '80%',
-        endingShape: 'rounded'
-      },
-    },
-    dataLabels: {
-      enabled: true
-    },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ['transparent']
-    },
-    xaxis: {
-      categories: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-    },
-    yaxis: {
-      title: {
-        text: 'R$'
-      }
-    },
-    fill: {
-      opacity: 1
-    },
-    tooltip: {
-      y: {
-        formatter: function (val) {
-          return "R$ " + val
-        }
-      }
-    }
-  },
-
-
-};
-
+import { data } from 'data';
+import dayjs from 'dayjs';
 
 
 const Chart = () => {
-  const { Title } = Typography;
+
+  const [dataPMonthReceita, setDataPMonthReceita] = React.useState();
+  const [dataPMonthDespesa, setDataPMonthDespesa] = React.useState();
+  const refreshChart = async (date, dateString) => {
+    const dataReceita = await data.getDataReceitaPMouth(dateString);
+    const valoresNumericosReceita = dataReceita.map(obj => parseFloat(obj.valor_total_mensal));
+    setDataPMonthReceita(valoresNumericosReceita);
+
+    const dataDespesa = await data.getDataDespesaPMouth(dateString);
+    const valoresNumericosDespesa = dataDespesa.map(obj => parseFloat(obj.valor_total_mensal));
+    setDataPMonthDespesa(valoresNumericosDespesa);
+
+  };
+
+  var state = {
+    series: [{
+      name: 'Receitas',
+      data: dataPMonthReceita,
+      color: "#228B22"
+    }, {
+      name: 'Despesas',
+      data: dataPMonthDespesa,
+      color: "#FF0000"
+    }],
+    options: {
+      chart: {
+        type: 'bar',
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '80%',
+          endingShape: 'rounded'
+        },
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent']
+      },
+      xaxis: {
+        categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+      },
+      yaxis: {
+        title: {
+          text: 'R$'
+        }
+      },
+      fill: {
+        opacity: 1
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return "R$ " + val + ",00";
+          }
+        }
+      }
+    },
+  };
+
+
   return (
     <Grid item xs={12} md={0} lg={12}>
-      <Title level={3}>Receitas X Despesas</Title>
       <Paper
         sx={{
           p: 2,
@@ -74,6 +84,14 @@ const Chart = () => {
         }}
         elevation={2}
       >
+        <DatePicker
+          //para obter o dayjs foi usado o import
+          // defaultValue={dayjs}
+          onChange={refreshChart}
+          picker="year"
+          placeholder='Selecione o ano para gerar o gráfico'
+          size='middle'
+        />
         <ReactApexChart options={state.options} series={state.series} type="bar" height={280} />
       </Paper>
     </Grid>

@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import Logout from '@mui/icons-material/Logout';
 import { auth2 } from "auth";
 
@@ -30,7 +31,7 @@ const AccountMenu = () => {
                     <IconButton
                         onClick={handleClick}
                         size="small"
-                        sx={{ ml: 2 }}
+                        sx={{ ml: 1, mr: -1 }}
                         aria-controls={open ? 'account-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
@@ -86,13 +87,13 @@ const AccountMenu = () => {
                         <PersonAdd fontSize="small" />
                     </ListItemIcon>
                     Add another account
-                </MenuItem>
+                </MenuItem>*/}
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
-                        <Settings fontSize="small" />
+                        <NotificationsNoneOutlinedIcon fontSize="small" />
                     </ListItemIcon>
-                    Settings
-                </MenuItem> */}
+                    Notificações
+                </MenuItem> 
                 <MenuItem onClick={auth2.logoutUser}>
                     <ListItemIcon>
                         <Logout fontSize="small" />

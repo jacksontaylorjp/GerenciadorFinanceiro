@@ -3,11 +3,11 @@ import { Divider, Modal } from 'antd';
 import React, { useContext, useState } from 'react';
 import { data } from '../../data';
 import { StatusModalContext } from 'context/StatusModalContext';
-import ModalMsg from 'componentes/ModalMsg';
+import { toast } from 'react-toastify';
 
 const ModalAddDespesas = ({ titulo }) => {
 
-  const { openModal, toogleModalDespesa, toogleModalMsg } = useContext(StatusModalContext);
+  const { openModal, toogleModalDespesa } = useContext(StatusModalContext);
 
   //usando apenas um useState para os campos do formulário
   const [fieldDespesa, setfieldDespesa] = useState({
@@ -88,8 +88,8 @@ const ModalAddDespesas = ({ titulo }) => {
       (error.descricao.valid && fieldDespesa.descricao !== "") &&
       (error.valor.valid && fieldDespesa.valor !== "")) {
       data.sendDataDespesa(fieldDespesa);
-      // console.log("201")
       toogleModalDespesa()
+      // console.log("201")
       setfieldDespesa((e) => ({
         ...e,
         tipo: "geral",
@@ -98,18 +98,18 @@ const ModalAddDespesas = ({ titulo }) => {
         valor: ""
 
       }))
-      toogleModalMsg()
+      toast.success("Despesa adicionada com sucesso!");
     } else {
-      console.log("Error - 400");
       hError(fieldDespesa.datavencimento, "datavencimento");
       hError(fieldDespesa.descricao, "descricao");
       hError(fieldDespesa.valor, "valor");
+      console.log("Error - 400");
+      toast.error("Erro ao adicionar despesa!");
     }
   }
 
   return (
     <>
-      <ModalMsg type='success' msg='Despesa adicionada com sucesso!' />
     {/* //está dentro de dashboard */}
       <Modal
         title={titulo}

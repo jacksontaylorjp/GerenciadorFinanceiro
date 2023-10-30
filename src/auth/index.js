@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 //mudar nome login
 async function login(user, password) {
     try {
@@ -15,10 +17,11 @@ async function login(user, password) {
         const resConv = await response.json();
         if (response.status === 200 && resConv.auth === true) {
             sessionStorage.setItem("token", resConv.token);
+            sessionStorage.setItem("user", resConv.user_name);
             window.location.href = "http://localhost:3000/dashboard";
-            return;
+            return resConv
         }
-        alert(resConv.error)
+        toast.error(resConv.error);
         return resConv;
     } catch (error) {
         console.log(error.message)

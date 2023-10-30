@@ -17,7 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ReceitaIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import DespesasIcon from '@mui/icons-material/MoneyOff';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import { Accordion, AccordionDetails, AccordionSummary, Badge, MenuItem} from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Badge, MenuItem } from '@mui/material';
 import BodyDashboard from 'componentes/BodyDashboard';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowDoubleRight from '@mui/icons-material/KeyboardDoubleArrowRight';
@@ -27,7 +27,7 @@ import AccountMenu from 'componentes/AccountMenu';
 
 import { useContext } from 'react';
 import { StatusModalContext } from 'context/StatusModalContext';
-import ModalMsg from 'componentes/ModalMsg';
+import { auth2 } from 'auth';
 
 //INÍCIO DA CUSTOMIZAÇÃO GRÁFICA
 const drawerWidth = 240;
@@ -101,7 +101,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const Dashboard = () => {
   const theme = useTheme();
 
-  const {openModal, toggleModalReceita, toogleModalDespesa} = useContext(StatusModalContext);
+  const { openModal, toggleModalReceita, toogleModalDespesa } = useContext(StatusModalContext);
 
   const [open, setOpen] = React.useState(false);
   const [expandedAccordionReceitas, setExpandedAccordionReceitas] = React.useState(false);
@@ -127,184 +127,176 @@ const Dashboard = () => {
     setExpandedAccordionDespesas(!expandedAccordionDespesas);
 
   };
-
-
-
   return (
     <>
-    <ModalAddReceita 
-                titulo="Receitas"
-              />
-    <ModalAddDespesas 
-                titulo="Despesas"
-              />
+      <ModalAddReceita
+        titulo="Receitas"
+      />
+      <ModalAddDespesas
+        titulo="Despesas"
+      />
 
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
 
-      <AppBar position="fixed" open={open}>
-        <Toolbar
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
+        <AppBar position="fixed" open={open}>
+          <Toolbar
             sx={{
-              marginRight: 5,
-              ...(open && { display: 'none' }),
+              display: 'flex',
+              justifyContent: 'space-between',
             }}
           >
-            {/* icone /// para abrir o menu */}
-            <MenuIcon />
-          </IconButton>
-          {/* titulo do nav */}
-          <Typography variant="h6" noWrap component="div">
-            Dashboard
-          </Typography>
-
-          {/* icone notificação */}
-          <MenuItem>
-
             <IconButton
-              size="large"
-              aria-label="show 2 new notifications"
               color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: 5,
+                ...(open && { display: 'none' }),
+              }}
             >
-              <Badge badgeContent={2} color="error">
-                <NotificationsNoneOutlinedIcon />
-              </Badge>
+              {/* icone /// para abrir o menu */}
+              <MenuIcon />
             </IconButton>
+            {/* titulo do nav */}
+            <Typography variant="h6" noWrap component="div">
+              Dashboard
+            </Typography>
 
-            {/* icone conta */}
-              <AccountMenu/>
+            <MenuItem>
+              <Typography>
+                {sessionStorage.getItem("user")}
+              </Typography>
+
               
-          </MenuItem>
-        </Toolbar>
-      </AppBar>
+                <Badge badgeContent={1} color="error">
+                {/* icone conta */}
+                <AccountMenu />
+                </Badge>
 
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
+            </MenuItem>
+          </Toolbar>
+        </AppBar>
 
-        {/* barra horizontal divisora */}
-        <Divider />
-        {/* INICIO DE RECEITAS */}
-        <Accordion
-          expanded={expandedAccordionReceitas}
-        >
-          <AccordionSummary
-            onClick={handleAccordionOpenCloseReceitas}
-            expandIcon={open ? <ExpandMoreIcon /> : ''}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+          </DrawerHeader>
 
+          {/* barra horizontal divisora */}
+          <Divider />
+          {/* INICIO DE RECEITAS */}
+          <Accordion
+            expanded={expandedAccordionReceitas}
           >
-            {/* lista dos icones */}
-            <ListItemIcon
-              sx={{
-                minWidth: 0,
-                mr: open ? 3 : 'auto',
-                ml: open ? 0 : 7.5,
-                justifyContent: 'center',
-              }}
+            <AccordionSummary
+              onClick={handleAccordionOpenCloseReceitas}
+              expandIcon={open ? <ExpandMoreIcon /> : ''}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+
             >
-              {/* icone */}
-              <ReceitaIcon />
-            </ListItemIcon>
-
-            <ListItemText primary="Receitas"
-              sx={{
-                opacity: open ? 1 : 0,
-              }}
-            />
-          </AccordionSummary>
-          <AccordionDetails>
-            <Divider />
-
-            <ListItemButton
-              sx={{
-                ml: open ? 3 : 0,
-              }}
-              onClick={toggleModalReceita}
+              {/* lista dos icones */}
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  ml: open ? 0 : 7.5,
+                  justifyContent: 'center',
+                }}
               >
-              {/* icone */}
-              <ArrowDoubleRight />
-              <ListItemText primary={"Adicionar"}
+                {/* icone */}
+                <ReceitaIcon />
+              </ListItemIcon>
+
+              <ListItemText primary="Receitas"
                 sx={{
-                  opacity: open ? 1 : 1,
+                  opacity: open ? 1 : 0,
                 }}
               />
-              
-            </ListItemButton>
-          </AccordionDetails>
-        </Accordion>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Divider />
 
-        {/* FIM DE RECEITAS */}
+              <ListItemButton
+                sx={{
+                  ml: open ? 3 : 0,
+                }}
+                onClick={toggleModalReceita}
+              >
+                {/* icone */}
+                <ArrowDoubleRight />
+                <ListItemText primary={"Adicionar"}
+                  sx={{
+                    opacity: open ? 1 : 1,
+                  }}
+                />
 
-        {/* INICIO DE DESPESAS */}
-        <Accordion
-          expanded={expandedAccordionDespesas}
-        >
-          <AccordionSummary
-            onClick={handleAccordionOpenCloseDespesas}
-            expandIcon={open ? <ExpandMoreIcon /> : ''}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
+              </ListItemButton>
+            </AccordionDetails>
+          </Accordion>
+
+          {/* FIM DE RECEITAS */}
+
+          {/* INICIO DE DESPESAS */}
+          <Accordion
+            expanded={expandedAccordionDespesas}
           >
-            <ListItemIcon
-              sx={{
-                minWidth: 0,
-                mr: open ? 3 : 'auto',
-                ml: open ? 0 : 8,
-                justifyContent: 'center',
-              }}
+            <AccordionSummary
+              onClick={handleAccordionOpenCloseDespesas}
+              expandIcon={open ? <ExpandMoreIcon /> : ''}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
             >
-              {/* icone */}
-              <DespesasIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Despesas"}
-              sx={{
-                opacity: open ? 1 : 0,
-              }}
-            />
-          </AccordionSummary>
-          <AccordionDetails>
-            <Divider />
-            <ListItemButton
-              sx={{
-                ml: open ? 3 : 0,
-              }}
-              onClick={toogleModalDespesa}
-            >
-              {/* icone */}
-              <ArrowDoubleRight />
-              <ListItemText primary={"Adicionar"}
+              <ListItemIcon
                 sx={{
-                  opacity: open ? 1 : 1,
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  ml: open ? 0 : 8,
+                  justifyContent: 'center',
+                }}
+              >
+                {/* icone */}
+                <DespesasIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Despesas"}
+                sx={{
+                  opacity: open ? 1 : 0,
                 }}
               />
-            </ListItemButton>
-          </AccordionDetails>
-        </Accordion>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Divider />
+              <ListItemButton
+                sx={{
+                  ml: open ? 3 : 0,
+                }}
+                onClick={toogleModalDespesa}
+              >
+                {/* icone */}
+                <ArrowDoubleRight />
+                <ListItemText primary={"Adicionar"}
+                  sx={{
+                    opacity: open ? 1 : 1,
+                  }}
+                />
+              </ListItemButton>
+            </AccordionDetails>
+          </Accordion>
 
-        {/* FIM DE DESPESAS */}
+          {/* FIM DE DESPESAS */}
 
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        {/* corpo do dashboard */}
-        <BodyDashboard />
+        </Drawer>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <DrawerHeader />
+          {/* corpo do dashboard */}
+          <BodyDashboard />
 
+        </Box>
       </Box>
-    </Box>
     </>
   );
 }

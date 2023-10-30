@@ -40,7 +40,49 @@ async function sendDataDespesa(despesa){
         console.log(error.message);
     }
 }
+
+//é necessário passar o headers por causa do token 
+async function getDataReceitaPMouth(year){
+    try {
+        const token = sessionStorage.getItem("token");
+        if(!token){
+            return false;
+        }
+        const response = await fetch(`http://localhost:4000/select_receita_month/${year}`,{
+            method: 'GET',
+            headers: {
+                "Content-Type":"Application/json",
+                "x-access-token": token
+            }
+        });
+        const resConv =  await response.json();
+        return resConv;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+async function getDataDespesaPMouth(year){
+    try {
+        const token = sessionStorage.getItem("token");
+        if(!token){
+            return false;
+        }
+        const response = await fetch(`http://localhost:4000/select_despesa_month/${year}`,{
+            method: 'GET',
+            headers: {
+                "Content-Type":"Application/json",
+                "x-access-token": token
+            }
+        });
+        const resConv =  await response.json();
+        return resConv;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 export const data = {
     sendDataReceita,
-    sendDataDespesa
+    sendDataDespesa,
+    getDataReceitaPMouth,
+    getDataDespesaPMouth
 };

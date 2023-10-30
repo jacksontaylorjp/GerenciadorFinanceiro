@@ -81,13 +81,13 @@ app.post('/login', async (req, res) => {
                 //os dados de user e password conferem então
                 //o primeiro parametro identifica minimamente o usuario
                 //o segundo parametro é a senha da assinatura
-                //o terceira parametro são as opções, que nesse caso foi colocado um tempo de expiração para o token
-                const token = jwt.sign({ useId: user._name, id: user.id }, SECRET, { expiresIn: 900 });
+                //o terceira parametro são as opções, que nesse caso foi colocado um tempo de expiração para o toke
+                const token = jwt.sign({ useId: user._name, id: user.id }, SECRET, { expiresIn: 1000000 });
                 //o front precisa guardar para as requisições
-                return res.json({ auth: true, token, user_id: user.id , id: user.id });
+                return res.json({ auth: true, token, user_id: user.id , user_name: user._name});
             }
         });
-        return res.json({ error: "E-mail ou senha inválido" });
+        return res.json({ error: "E-mail ou senha inválido!" });
     } catch (e) {
         console.log(e.message)
     }
@@ -118,6 +118,17 @@ app.post("/insert_despesa", verifyJWT,async (req, res) => {
     //para demostrar que os dados foi cadastrado com sucesso usa-se o 201
     res.sendStatus(201);
 })
+
+//rota para buscar os valores totais por mês de um ano específico
+app.get("/select_receita_month/:year", verifyJWT,async (req, res) => {
+    const receita = await db.selectReceitaYear(req.id, req.params.year);
+    res.json(receita);
+});
+
+app.get("/select_despesa_month/:year", verifyJWT,async (req, res) => {
+    const despesa = await db.selectDespesaYear(req.id, req.params.year);
+    res.json(despesa);
+});
 
 //criando uma rota para lista apenas usuario
 //os : informa que será passado um parametro genérico.

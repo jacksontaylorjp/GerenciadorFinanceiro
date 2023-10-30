@@ -1,12 +1,12 @@
 import { MenuItem, Select, TextField } from '@mui/material';
-import { Alert, Button, Divider, Modal } from 'antd';
-import React, { createContext, useContext, useState } from 'react';
+import { Divider, Modal } from 'antd';
+import React, { useContext, useState } from 'react';
 import { data } from '../../data';
 import { StatusModalContext } from 'context/StatusModalContext';
-import ModalMsg from 'componentes/ModalMsg';
+import { toast } from 'react-toastify';
 
 const ModalAddReceitas = ({ titulo }) => {
-  const { openModal, toggleModalReceita, toogleModalMsg } = useContext(StatusModalContext);
+  const { openModal, toggleModalReceita } = useContext(StatusModalContext);
 
   //usando apenas um useState para os campos do formulário
   const [fieldReceita, setFieldReceita] = useState({
@@ -96,18 +96,19 @@ const ModalAddReceitas = ({ titulo }) => {
         descricao: "",
         valor: ""
       }))
-      toogleModalMsg()
+      toast.success("Receita adicionada com sucesso!")
     } else {
       hError(fieldReceita.datarecebimento, "datarecebimento");
       hError(fieldReceita.descricao, "descricao");
       hError(fieldReceita.valor, "valor");
+      //toast para error
+      toast.error("Erro ao adicionar receita!");
       console.log("Error - 400");
     }
   }
 
   return (
     <>
-      <ModalMsg type='success' msg='Receita adicionada com sucesso!' />
       {/* //está dentro de dashboard */}
       <Modal
         title={titulo}
