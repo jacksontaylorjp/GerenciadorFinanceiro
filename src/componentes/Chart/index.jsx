@@ -4,13 +4,15 @@ import { DatePicker } from "antd";
 import { Grid, Paper } from "@mui/material";
 import { data } from 'data';
 import dayjs from 'dayjs';
+import { useEffect } from 'react';
 
 
 const Chart = () => {
 
   const [dataPMonthReceita, setDataPMonthReceita] = React.useState();
   const [dataPMonthDespesa, setDataPMonthDespesa] = React.useState();
-  const refreshChart = async (date, dateString) => {
+
+  async function refreshChart(date, dateString){
     const dataReceita = await data.getDataReceitaPMouth(dateString);
     const valoresNumericosReceita = dataReceita.map(obj => parseFloat(obj.valor_total_mensal));
     setDataPMonthReceita(valoresNumericosReceita);
@@ -20,6 +22,10 @@ const Chart = () => {
     setDataPMonthDespesa(valoresNumericosDespesa);
 
   };
+  // iniciando o gráfico com os dados do ano atual
+  useEffect(()=>{
+    refreshChart(dayjs,dayjs().$y)
+  },[])
 
   var state = {
     series: [{
@@ -74,10 +80,10 @@ const Chart = () => {
 
 
   return (
-    <Grid item xs={12} md={0} lg={12}>
+    <Grid item xs={12} md={0} lg={8}>
       <Paper
         sx={{
-          p: 2,
+          p: 1,
           display: 'flex',
           flexDirection: 'column',
           // height: 300,
@@ -86,7 +92,7 @@ const Chart = () => {
       >
         <DatePicker
           //para obter o dayjs foi usado o import
-          // defaultValue={dayjs}
+          defaultValue={dayjs}
           onChange={refreshChart}
           picker="year"
           placeholder='Selecione o ano para gerar o gráfico'
