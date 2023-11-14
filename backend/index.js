@@ -84,7 +84,7 @@ app.post('/login', async (req, res) => {
                 //o terceira parametro são as opções, que nesse caso foi colocado um tempo de expiração para o toke
                 const token = jwt.sign({ useId: user._name, id: user.id }, SECRET, { expiresIn: 1000000 });
                 //o front precisa guardar para as requisições
-                return res.json({ auth: true, token, user_id: user.id , user_name: user._name});
+                return res.json({ auth: true, token, user_id: user.id, user_name: user._name });
             }
         });
         return res.json({ error: "E-mail ou senha inválido!" });
@@ -106,27 +106,37 @@ app.post('/logout', (req, res) => {
 
 
 // rota para cadastro de receita
-app.post("/insert_receita", verifyJWT,async (req, res) => {
+app.post("/insert_receita", verifyJWT, async (req, res) => {
     await db.insertReceita(req.body.receita, req.id);
     //para demostrar que os dados foi cadastrado com sucesso usa-se o 201
     res.sendStatus(201);
 })
 
 // rota para cadastro de despesa
-app.post("/insert_despesa", verifyJWT,async (req, res) => {
+app.post("/insert_despesa", verifyJWT, async (req, res) => {
     await db.insertDespesa(req.body.despesa, req.id);
     //para demostrar que os dados foi cadastrado com sucesso usa-se o 201
     res.sendStatus(201);
 })
 
 //rota para buscar os valores totais por mês de um ano específico
-app.get("/select_receita_month/:year", verifyJWT,async (req, res) => {
-    const receita = await db.selectReceitaYear(req.id, req.params.year);
+app.get("/select_receita_month/:year", verifyJWT, async (req, res) => {
+    const receita = await db.selectReceitaOUDespesaYear(req.id, req.params.year, 'datarecebimento', 'receita');
     res.json(receita);
 });
 
-app.get("/select_despesa_month/:year", verifyJWT,async (req, res) => {
-    const despesa = await db.selectDespesaYear(req.id, req.params.year);
+app.get("/select_despesa_month/:year", verifyJWT, async (req, res) => {
+    const despesa = await db.selectReceitaOUDespesaYear(req.id, req.params.year, 'datavencimento', 'despesa');
+    res.json(despesa);
+});
+
+app.get("/select_receita", verifyJWT, async (req, res) => {
+    const receita = await db.select_receitaOUdespesa('receita');
+    res.json(receita);
+});
+
+app.get("/select_despesa", verifyJWT, async (req, res) => {
+    const despesa = await db.select_receitaOUdespesa('despesa');
     res.json(despesa);
 });
 

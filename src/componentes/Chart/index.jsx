@@ -2,30 +2,23 @@ import * as React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { DatePicker } from "antd";
 import { Grid, Paper } from "@mui/material";
-import { data } from 'data';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
+import { useContext } from 'react';
+import { RefreshChartContext } from 'context/RefreshChartContext';
+import { StatusModalContext } from 'context/StatusModalContext';
 
 
 const Chart = () => {
+//usando o status do modal para atualizar o gráfico
+const {openModal} = useContext(StatusModalContext);
 
-  const [dataPMonthReceita, setDataPMonthReceita] = React.useState();
-  const [dataPMonthDespesa, setDataPMonthDespesa] = React.useState();
-
-  async function refreshChart(date, dateString){
-    const dataReceita = await data.getDataReceitaPMouth(dateString);
-    const valoresNumericosReceita = dataReceita.map(obj => parseFloat(obj.valor_total_mensal));
-    setDataPMonthReceita(valoresNumericosReceita);
-
-    const dataDespesa = await data.getDataDespesaPMouth(dateString);
-    const valoresNumericosDespesa = dataDespesa.map(obj => parseFloat(obj.valor_total_mensal));
-    setDataPMonthDespesa(valoresNumericosDespesa);
-
-  };
+const {refreshChart, dataPMonthReceita, dataPMonthDespesa} = useContext(RefreshChartContext);
   // iniciando o gráfico com os dados do ano atual
   useEffect(()=>{
     refreshChart(dayjs,dayjs().$y)
-  },[])
+    // atualizando o chart toda vez que o modal é aberto ou fechado
+  },[openModal]);
 
   var state = {
     series: [{

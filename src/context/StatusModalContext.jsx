@@ -1,7 +1,6 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
 
 export const StatusModalContext = createContext();
-
 //usando o children para envolver todos os componentes
 export const StatusModalProvider = ({ children }) => {
     const [ openModal, setOpenModal ] = useState({receita:false, despesa:false});
@@ -27,3 +26,4 @@ export const StatusModalProvider = ({ children }) => {
         </StatusModalContext.Provider>
     )
 }
+

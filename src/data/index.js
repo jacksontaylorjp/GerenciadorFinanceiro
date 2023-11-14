@@ -16,7 +16,7 @@ async function sendDataReceita(receita){
         })
         return response;
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
     }
 }
 async function sendDataDespesa(despesa){
@@ -37,7 +37,7 @@ async function sendDataDespesa(despesa){
         })
         return response;
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
     }
 }
 
@@ -58,7 +58,7 @@ async function getDataReceitaPMouth(year){
         const resConv =  await response.json();
         return resConv;
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
     }
 }
 async function getDataDespesaPMouth(year){
@@ -77,12 +77,53 @@ async function getDataDespesaPMouth(year){
         const resConv =  await response.json();
         return resConv;
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
+    }
+}
+
+async function getDataReceita(){
+    try {
+        const token = sessionStorage.getItem("token");
+        if(!token){
+            return false;
+        }
+        const response = await fetch(`http://localhost:4000/select_receita`,{
+            method: 'GET',
+            headers: {
+                "Content-Type":"Application/json",
+                "x-access-token": token
+            }
+        });
+        const resConv =  await response.json();
+        return resConv;
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+async function getDataDespesa(){
+    try {
+        const token = sessionStorage.getItem("token");
+        if(!token){
+            return false;
+        }
+        const response = await fetch(`http://localhost:4000/select_despesa`,{
+            method: 'GET',
+            headers: {
+                "Content-Type":"Application/json",
+                "x-access-token": token
+            }
+        });
+        const resConv =  await response.json();
+        return resConv;
+    } catch (error) {
+        console.error(error.message);
     }
 }
 export const data = {
     sendDataReceita,
     sendDataDespesa,
+    getDataReceita,
+    getDataDespesa,
     getDataReceitaPMouth,
     getDataDespesaPMouth
 };

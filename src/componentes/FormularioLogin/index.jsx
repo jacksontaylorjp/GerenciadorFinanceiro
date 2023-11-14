@@ -5,7 +5,7 @@ import { useState } from "react";
 const FormularioLogin = () => {
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
-    const [auth, setAuth] = useState({ email: "", password: "" });
+    const [auth, setAuth] = useState({ email: "admin@admin.com", password: "12345678" });
 
     async function handlerSubmit() {
         //se não tiver error no formulário é solicitado ao backend a verificação dos dados
