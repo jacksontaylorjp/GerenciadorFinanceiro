@@ -33,6 +33,67 @@ app.use(cors({
 
 //configurando beck para receber json
 app.use(express.json());
+//-----------------------------------------------
+// class AlunoController {
+//     constructor(alunoService){
+//         this.service = alunoService;
+//     }
+    
+//     criar(req, res){
+//         console.log(this.service);
+//         this.service.criar();
+//         res.json(
+//             {
+//                 message: "Criar aluno",
+//             }
+//         )
+//     }
+//     mostrar(req, res){
+//         const {id} = req.params;
+
+//         console.log(this.service);
+//         const aluno = this.service.mostrar(id);
+
+//         res.json(
+//             {
+//                 message: "Mostrar aluno #" + id,
+//                 aluno
+//             }
+//         )
+//     }
+
+// }
+// class AlunoService {
+//     constructor(repository){
+//         this.repository = repository;
+//     }
+//     criar(){
+//         this.repository.criar();
+//     }
+//     mostrar(id){
+//         return this.repository.mostrar(id); 
+//     }
+// }
+// class AlunoRepository {
+//     criar(){
+//         console.log("Criar novo usuário");
+//     }
+//     mostrar(id){
+//         return {
+//             id: id,
+//             name: "Mostrar"
+//         }
+//     }
+// }
+
+// const repository = new AlunoRepository();
+// const alunoService = new AlunoService(repository);
+// const alunoController = new AlunoController(alunoService);
+
+// app.get('/alunos/:id', alunoController.mostrar);
+// app.post('/alunos', alunoController.criar);
+// // app.get('/api/, )
+//-------------------------------------------
 
 //criando uma rota para teste
 app.get("/", (req, res) => {
