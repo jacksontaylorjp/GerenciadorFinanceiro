@@ -7,7 +7,7 @@ const BodyDashboard = () => {
     return (
         <Grid container spacing={4}>
             {/* gráfico receita x despesa */}
-            <Balanco />
+            {/* <Balanco /> */}
             <Chart />
             <TableRD />
         </Grid >

@@ -192,12 +192,12 @@ app.get("/select_despesa_month/:year", verifyJWT, async (req, res) => {
 });
 
 app.get("/select_receita", verifyJWT, async (req, res) => {
-    const receita = await db.select_receitaOUdespesa('receita');
+    const receita = await db.select_receitaOUdespesa('receita', req.id);
     res.json(receita);
 });
 
 app.get("/select_despesa", verifyJWT, async (req, res) => {
-    const despesa = await db.select_receitaOUdespesa('despesa');
+    const despesa = await db.select_receitaOUdespesa('despesa', req.id);
     res.json(despesa);
 });
 

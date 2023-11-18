@@ -100,10 +100,10 @@ async function deleteUser(id) {
     }
 }
 
-async function select_receitaOUdespesa(receitaOUdespesa) {
+async function select_receitaOUdespesa(receitaOUdespesa, id) {
     const client = await connect();
     try {
-        const res = await client.query(`SELECT * FROM ${receitaOUdespesa}`);
+        const res = await client.query(`SELECT * FROM ${receitaOUdespesa} where user_id = ${id}`);
         return res.rows;
     } finally {
         disconnect(client, "Select users");

@@ -10,15 +10,15 @@ import { StatusModalContext } from 'context/StatusModalContext';
 
 
 const Chart = () => {
-//usando o status do modal para atualizar o gráfico
-const {openModal} = useContext(StatusModalContext);
+  //usando o status do modal para atualizar o gráfico
+  const { openModal } = useContext(StatusModalContext);
 
-const {refreshChart, dataPMonthReceita, dataPMonthDespesa} = useContext(RefreshChartContext);
+  const { refreshChart, dataPMonthReceita, dataPMonthDespesa } = useContext(RefreshChartContext);
   // iniciando o gráfico com os dados do ano atual
-  useEffect(()=>{
-    refreshChart(dayjs,dayjs().$y)
+  useEffect(() => {
+    refreshChart(dayjs, dayjs().$y)
     // atualizando o chart toda vez que o modal é aberto ou fechado
-  },[openModal]);
+  }, [openModal]);
 
   var state = {
     series: [{
@@ -61,6 +61,9 @@ const {refreshChart, dataPMonthReceita, dataPMonthDespesa} = useContext(RefreshC
       fill: {
         opacity: 1
       },
+      title: {
+        text: 'Anual: Receita x Despesa',
+      },
       tooltip: {
         y: {
           formatter: function (val) {
@@ -73,15 +76,17 @@ const {refreshChart, dataPMonthReceita, dataPMonthDespesa} = useContext(RefreshC
 
 
   return (
-    <Grid item xs={12} md={0} lg={8}>
+    <Grid item xs={12} md={0} lg={12}>
       <Paper
         sx={{
           p: 1,
+          mb: 0.15,
           display: 'flex',
           flexDirection: 'column',
+          width:100,
           // height: 300,
         }}
-        elevation={2}
+        elevation={3}
       >
         <DatePicker
           //para obter o dayjs foi usado o import
@@ -91,6 +96,16 @@ const {refreshChart, dataPMonthReceita, dataPMonthDespesa} = useContext(RefreshC
           placeholder='Selecione o ano para gerar o gráfico'
           size='middle'
         />
+      </Paper>
+      <Paper
+        sx={{
+          p: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          // height: 300,
+        }}
+        elevation={2}
+      >
         <ReactApexChart options={state.options} series={state.series} type="bar" height={280} />
       </Paper>
     </Grid>
