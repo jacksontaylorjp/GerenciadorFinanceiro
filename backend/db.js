@@ -27,7 +27,7 @@ async function connect() {
     return client;
 }
 
-connect();
+// connect();
 
 async function disconnect(client, message = "CONNN") {
     await client.end();
@@ -39,11 +39,9 @@ async function selectUsers() {
     //connectando ao banco
     const client = await connect();
     try {
-
         const res = await client.query("SELECT * FROM users");
         return res.rows;
     } finally {
-
         disconnect(client, "Select users");
     }
 }
@@ -57,7 +55,6 @@ async function selectUser(id) {
         const res = await client.query("SELECT * FROM users WHERE ID=$1", [id]);
         return res.rows;
     } finally {
-
         disconnect(client, "Select user");
     }
 }
@@ -68,7 +65,8 @@ async function insertUser(user) {
     try {
         const sql = "INSERT INTO users(_name, _email, _password) VALUES ($1, $2, $3);";
         const values = [user._name, user._email, user._password];
-        return await client.query(sql, values);
+        const res = await client.query(sql, values);
+        return res;
     } finally {
         //comando para o banco, foi passado de forma diferente para evitar ataques.
         disconnect(client, "insert user");
@@ -84,7 +82,6 @@ async function updateUser(id, user) {
         const res = await client.query(sql, values);
         return res;
     } finally {
-
         disconnect(client, "Select update user");
     }
 }
@@ -99,7 +96,6 @@ async function deleteUser(id) {
         const res = await client.query(sql, values);
         return res;
     } finally {
-
         disconnect(client, "delete users");
     }
 }
@@ -107,11 +103,9 @@ async function deleteUser(id) {
 async function select_receitaOUdespesa(receitaOUdespesa) {
     const client = await connect();
     try {
-
         const res = await client.query(`SELECT * FROM ${receitaOUdespesa}`);
         return res.rows;
     } finally {
-
         disconnect(client, "Select users");
     }
 }
@@ -122,7 +116,7 @@ async function insertReceita(receita, id) {
         const sql = "INSERT INTO receita (tipo, datarecebimento, descricao, valor, user_id)values($1, $2, $3, $4, $5) ;"
         const values = [receita.tipo, receita.datarecebimento, receita.descricao, receita.valor, id];
         const res = await client.query(sql, values);
-        return res
+        return res;
     } finally {
         disconnect(client, "inserir receita");
     }
@@ -135,7 +129,6 @@ async function insertDespesa(despesa, id) {
         const res = await client.query(sql, values);
         return res;
     } finally {
-
         disconnect(client, "inserir despesa");
     }
 }
