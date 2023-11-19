@@ -1,7 +1,7 @@
 import { MenuItem, Select, TextField } from '@mui/material';
 import { Divider, Modal } from 'antd';
 import React, { useContext, useState } from 'react';
-import { data } from '../../data';
+import { data } from '../../controller';
 import { StatusModalContext } from 'context/StatusModalContext';
 import { toast } from 'react-toastify';
 

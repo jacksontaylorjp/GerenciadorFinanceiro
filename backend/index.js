@@ -201,6 +201,13 @@ app.get("/select_despesa", verifyJWT, async (req, res) => {
     res.json(despesa);
 });
 
+app.delete("/delete_receita/:id", verifyJWT, async(req, res) => {
+    await db.deleteReceitaOuDespesa('receita', req.params.id);
+});
+app.delete("/delete_despesa/:id", verifyJWT, async(req, res) => {
+    await db.deleteReceitaOuDespesa('despesa', req.params.id);
+});
+
 //criando uma rota para lista apenas usuario
 //os : informa que será passado um parametro genérico.
 // app.get("/users/:id", async (req, res) => {

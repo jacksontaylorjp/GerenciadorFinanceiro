@@ -1,4 +1,4 @@
-import { data } from 'data';
+import { data } from 'controller';
 import { createContext } from 'react';
 import { useState } from 'react';
 

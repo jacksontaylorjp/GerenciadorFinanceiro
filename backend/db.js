@@ -163,6 +163,18 @@ async function selectReceitaOUDespesaYear(id, year, data, receitaOUdespesa) {
     }
 }
 
+async function deleteReceitaOuDespesa(nomeDaTabela, id){
+    const client = await connect();
+    try {
+        const sql = `DELETE FROM ${nomeDaTabela} WHERE id=$1`;
+        const values = [id];
+        const res = await client.query(sql, values);
+        return res;
+    }finally {
+        disconnect(client, "delete receita ou despesa");
+    }
+}
+
 module.exports = {
     selectUsers,
     selectUser,
@@ -173,5 +185,6 @@ module.exports = {
     insertReceita,
     insertDespesa,
     selectReceitaOUDespesaYear,
+    deleteReceitaOuDespesa
 
 }
