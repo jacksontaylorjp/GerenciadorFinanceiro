@@ -164,6 +164,28 @@ async function delete_despesa(id) {
         console.error(error.message);
     }
 }
+
+async function updateReceita(receita) {
+    try {
+        const token = sessionStorage.getItem("token");
+        if (!token) {
+            return false;
+        }
+        const response = await fetch(`http://localhost:4000/update_receita`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "Application/json",
+                'x-access-token': token
+            },
+            body: JSON.stringify({
+                "receita": receita
+            })
+        })
+        return response;
+    } catch (error) {
+        console.error(error.message);
+    }
+}
 export const data = {
     sendDataReceita,
     sendDataDespesa,
@@ -172,5 +194,6 @@ export const data = {
     getDataReceitaPMouth,
     getDataDespesaPMouth,
     delete_receita,
-    delete_despesa
+    delete_despesa,
+    updateReceita
 };

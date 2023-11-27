@@ -175,6 +175,20 @@ async function deleteReceitaOuDespesa(nomeDaTabela, id){
     }
 }
 
+async function updateReceita(receita) {
+    console.log(receita.tipo, 'db update');
+    //connectando ao banco
+    const client = await connect();
+    try {
+        const sql = "UPDATE receita SET tipo=$1, datarecebimento=$2, descricao=$3, valor=$4 WHERE id=$5";
+        const values = [receita.tipo, receita.datarecebimento, receita.descricao, receita.valor, receita.id];
+        const res = await client.query(sql, values);
+        return res;
+    } finally {
+        disconnect(client, "update update receita");
+    }
+}
+
 module.exports = {
     selectUsers,
     selectUser,
@@ -185,6 +199,7 @@ module.exports = {
     insertReceita,
     insertDespesa,
     selectReceitaOUDespesaYear,
-    deleteReceitaOuDespesa
+    deleteReceitaOuDespesa,
+    updateReceita
 
 }

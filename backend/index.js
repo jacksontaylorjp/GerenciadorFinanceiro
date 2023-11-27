@@ -38,7 +38,7 @@ app.use(express.json());
 //     constructor(alunoService){
 //         this.service = alunoService;
 //     }
-    
+
 //     criar(req, res){
 //         console.log(this.service);
 //         this.service.criar();
@@ -201,12 +201,18 @@ app.get("/select_despesa", verifyJWT, async (req, res) => {
     res.json(despesa);
 });
 
-app.delete("/delete_receita/:id", verifyJWT, async(req, res) => {
+app.delete("/delete_receita/:id", verifyJWT, async (req, res) => {
     await db.deleteReceitaOuDespesa('receita', req.params.id);
 });
-app.delete("/delete_despesa/:id", verifyJWT, async(req, res) => {
+app.delete("/delete_despesa/:id", verifyJWT, async (req, res) => {
     await db.deleteReceitaOuDespesa('despesa', req.params.id);
 });
+
+app.patch("/update_receita", async (req, res) => {
+    await db.updateReceita(req.body);
+    console.log(req.body, 'back req.body');
+    res.sendStatus(200);
+})
 
 //criando uma rota para lista apenas usuario
 //os : informa que será passado um parametro genérico.

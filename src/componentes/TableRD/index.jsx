@@ -11,7 +11,7 @@ const TableRD = () => {
 
     //------------------------------------------------------------------------------
     //usando o status do modal para atualizar o gráfico
-    const { openModal } = useContext(StatusModalContext);
+    const { openModal, toggleModalReceita, setFieldReceita } = useContext(StatusModalContext);
     //usando o refreshChart do context para atualizar o gráfico ao apagar dados da tabela
     const { refreshChart } = useContext(RefreshChartContext);
     const [receita, setReceita] = useState([])
@@ -70,10 +70,10 @@ const TableRD = () => {
         {
             title: 'Editar',
             key: 'action',
-            render: () => (
+            render: (text, record) => (
                 <EditTwoTone
                     style={{ fontSize: '20px' }}
-                    onClick={() => { console.log('editar') }}
+                    onClick={() => { handleEditarR(record) }}
                 />
             ),
         },
@@ -169,6 +169,20 @@ const TableRD = () => {
         console.log(`checked = ${e.target.checked}`
         );
     };
+
+    const handleEditarR = (record) => {
+        toggleModalReceita()
+        console.log(record, 'table');
+        setFieldReceita((e) => ({
+            ...e,
+            id: record.id,
+            tipo: record.tipo,
+            datarecebimento: record.data,
+            descricao: record.descricao,
+            valor: parseFloat(record.valor),
+          }))
+    };
+
     // para acessar o id, foi necessário colocar no render do botão a prop record. Assim como no onclick passar record.id
     const handleExcluirR = (id) => {
         data.delete_receita(id)

@@ -1,17 +1,17 @@
 import { MenuItem, Select, TextField } from '@mui/material';
-import { Divider, Modal } from 'antd';
+import { Button, Divider, Modal } from 'antd';
 import React, { useContext, useState } from 'react';
 import { data } from '../../controller';
 import { StatusModalContext } from 'context/StatusModalContext';
 import { toast } from 'react-toastify';
 
 const ModalAddReceitas = ({ titulo }) => {
-  const { openModal, toggleModalReceita } = useContext(StatusModalContext);
+  const { openModal, toggleModalReceita, fieldReceita, setFieldReceita } = useContext(StatusModalContext);
 
   //usando apenas um useState para os campos do formulário
-  const [fieldReceita, setFieldReceita] = useState({
-    tipo: "geral", datarecebimento: "", descricao: "", valor: ""
-  })
+  // const [fieldReceita, setFieldReceita] = useState({
+  //   tipo: "geral", datarecebimento: "", descricao: "", valor: ""
+  // })
 
   const [error, setError] = useState({
     datarecebimento: { valid: true, msg: "" },
@@ -106,6 +106,31 @@ const ModalAddReceitas = ({ titulo }) => {
       console.log("Error - 400");
     }
   }
+  function handlerEdit() {
+    if ((error.datarecebimento.valid && fieldReceita.datarecebimento !== "") &&
+      (error.descricao.valid && fieldReceita.descricao !== "") &&
+      (error.valor.valid && fieldReceita.valor !== "")) {
+      data.updateReceita(fieldReceita);
+      console.log(fieldReceita, 'modal');
+      console.log("201")
+      toggleModalReceita()
+      setFieldReceita((e) => ({
+        ...e,
+        tipo: "geral",
+        datarecebimento: "",
+        descricao: "",
+        valor: ""
+      }))
+      toast.success("Receita salva com sucesso!")
+    } else {
+      hError(fieldReceita.datarecebimento, "datarecebimento");
+      hError(fieldReceita.descricao, "descricao");
+      hError(fieldReceita.valor, "valor");
+      //toast para error
+      toast.error("Erro ao salvar receita!");
+      console.log("Error - 400");
+    }
+  }
 
   return (
     <>
@@ -113,8 +138,14 @@ const ModalAddReceitas = ({ titulo }) => {
       <Modal
         title={titulo}
         open={openModal.receita}
-        onOk={handlerSubmit}
         onCancel={toggleModalReceita}
+        footer={() => (
+          <>
+            <Button type="primary" onClick={toggleModalReceita}>Voltar</Button>
+            <Button type="primary" onClick={handlerEdit}>Salvar alterações</Button>
+            <Button type="primary" onClick={handlerSubmit}>Nova receita</Button>
+          </>
+        )}
       >
         <Divider orientation="left"></Divider>
         {/* <InputLabel id="demo-simple-select-label">Tipo</InputLabel> */}
